@@ -31,6 +31,24 @@ const config = {
 const game = new Phaser.Game(config);
 
 function preload() {
+
+    let progress = this.add.graphics();
+
+    this.load.on('progress', function (value) {
+
+        progress.clear();
+        progress.fillStyle(0xffffff, 1);
+        progress.fillRect(0, 270, 800 * value, 60);
+        console.log("progress:",value);
+
+    });
+
+    this.load.on('complete', function () {
+
+        progress.destroy();
+
+    });
+
     this.load.image('sky', 'assets/textures/world/sky.png');
     this.load.image('ground', 'assets/textures/world/platform.png');
     this.load.image('star', 'assets/textures/sprites/star.png');
@@ -45,7 +63,7 @@ function preload() {
 
 function create() {
 
-    let background_music = this.sound.add('bgm_clam');
+    let background_music = this.sound.add('bgm_calm');
     background_music.play();
     this.add.image(400, 300, 'sky');
 
