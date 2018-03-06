@@ -7,8 +7,12 @@ let round = 1;
 let score = 0;
 let scoreText;
 let roundText;
+let bombs;
 
-let cursors;
+let controls = {};
+let gameover = 0;
+
+let collider;
 
 const config = {
     type: Phaser.CANVAS,
@@ -39,7 +43,7 @@ function preload() {
         progress.clear();
         progress.fillStyle(0xffffff, 1);
         progress.fillRect(0, 270, 800 * value, 60);
-        console.log("progress:",value);
+        console.log("progress:", value);
 
     });
 
@@ -49,6 +53,8 @@ function preload() {
 
     });
 
+    this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
+    this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
     this.load.image('sky', 'assets/textures/world/sky.png');
     this.load.image('ground', 'assets/textures/world/platform.png');
     this.load.image('star', 'assets/textures/sprites/star.png');
@@ -57,13 +63,12 @@ function preload() {
         'assets/textures/sprites/dude.png',
         {frameWidth: 32, frameHeight: 48}
     );
-    this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
-    this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
 }
 
 function create() {
-
+    const game = this;
     let background_music = this.sound.add('bgm_calm');
+    background_music.volume = 0.05;
     background_music.play();
     this.add.image(400, 300, 'sky');
 
@@ -100,8 +105,17 @@ function create() {
         repeat: -1
     });
 
-    this.physics.add.collider(player, platforms);
-    cursors = this.input.keyboard.createCursorKeys();
+    collider = this.physics.add.collider(player, platforms);
+    controls.arrows = this.input.keyboard.createCursorKeys();
+
+    controls.wasd = {
+        up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+        down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        left: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        right: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+    };
+
+    controls.velocity = player.body.velocity;
 
     stars = this.physics.add.group({
         key: 'star',
@@ -110,36 +124,51 @@ function create() {
     });
     this.physics.add.collider(stars, platforms);
     this.physics.add.overlap(player, stars, collectStar, null, this);
-    scoreText = this.add.text(16, 10, 'Score: 0', { fontSize: '30px', fill: '#000' });
-    roundText = this.add.text(16, 40, 'Round: 1', { fontSize: '30px', fill: '#000' });
+    scoreText = this.add.text(16, 10, 'Score: 0', {fontSize: '30px', fill: '#000'});
+    roundText = this.add.text(16, 40, 'Round: 1', {fontSize: '30px', fill: '#000'});
 
     bombs = this.physics.add.group();
 
     this.physics.add.collider(bombs, platforms);
 
     this.physics.add.collider(player, bombs, hitBomb, null, this);
+    this.input.keyboard.on('keydown_R', function (event) {
+
+        console.log('Hello from the r Key!');
+        restart(game, player);
+
+    });
+    this.input.keyboard.on('keydown_Q', function (event) {
+
+        if (collider !== null) {
+            collider.active=false;
+        }
+
+    });
 
 
 }
 
 function update() {
-    if (cursors.left.isDown) {
-        player.setVelocityX(-160);
+    if (!gameover) {
+        if (controls.arrows.left.isDown || controls.wasd.left.isDown) {
+            player.setVelocityX(-160);
 
-        player.anims.play('left', true);
-    }
-    else if (cursors.right.isDown) {
-        player.setVelocityX(160);
+            player.anims.play('left', true);
+        }
+        else if (controls.arrows.right.isDown || controls.wasd.right.isDown) {
+            player.setVelocityX(160);
 
-        player.anims.play('right', true);
-    }
-    else {
-        player.setVelocityX(0);
+            player.anims.play('right', true);
+        }
+        else {
+            player.setVelocityX(0);
 
-        player.anims.play('turn');
-    }
+            player.anims.play('turn');
+        }
 
-    if (cursors.up.isDown && player.body.touching.down) {
-        player.setVelocityY(-330);
+        if ((controls.arrows.up.isDown || controls.wasd.up.isDown) && player.body.touching.down) {
+            player.setVelocityY(-330);
+        }
     }
 }
