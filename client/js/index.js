@@ -39,9 +39,14 @@ function preload() {
         'assets/textures/sprites/dude.png',
         {frameWidth: 32, frameHeight: 48}
     );
+    this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
+    this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
 }
 
 function create() {
+
+    let background_music = this.sound.add('bgm_clam');
+    background_music.play();
     this.add.image(400, 300, 'sky');
 
     platforms = this.physics.add.staticGroup();
