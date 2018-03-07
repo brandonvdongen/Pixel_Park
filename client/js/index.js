@@ -156,6 +156,8 @@ function create() {
 
     });
     running = true;
+    start_multiplayer();
+
 }
 
 function update() {
