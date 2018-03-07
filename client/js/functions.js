@@ -1,7 +1,12 @@
 function update_hud() {
     scoreText.setText('Score: ' + score);
     roundText.setText('Round: ' + round);
-    playerCountText.setText('Players: ' + (Object.keys(remote_players).length));
+    playerCount = (Object.keys(remote_players).length);
+    if (playerCount <= 0) {
+        playerCountText.setText('Multiplayer server offline');
+    } else {
+        playerCountText.setText('Players: ' + (Object.keys(remote_players).length));
+    }
 }
 
 function resetStars(stars) {
