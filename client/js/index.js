@@ -69,6 +69,10 @@ function preload() {
         'assets/textures/sprites/dude.png',
         {frameWidth: 32, frameHeight: 48}
     );
+    this.load.spritesheet('dude2',
+        'assets/textures/sprites/dude2.png',
+        {frameWidth: 32, frameHeight: 48}
+    );
 }
 
 function create() {
@@ -90,6 +94,26 @@ function create() {
 
     player.setBounce(0.1);
     player.setCollideWorldBounds(true);
+
+    this.anims.create({
+        key: 'otherleft',
+        frames: this.anims.generateFrameNumbers('dude2', {start: 0, end: 3}),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'otherturn',
+        frames: [{key: 'dude2', frame: 4}],
+        frameRate: 20
+    });
+
+    this.anims.create({
+        key: 'otherright',
+        frames: this.anims.generateFrameNumbers('dude2', {start: 5, end: 8}),
+        frameRate: 10,
+        repeat: -1
+    });
 
     this.anims.create({
         key: 'left',

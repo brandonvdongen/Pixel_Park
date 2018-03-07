@@ -6,17 +6,17 @@ function update_movement(player, movement) {
         if (movement["Left"]) {
             player.setVelocityX(-160);
 
-            player.anims.play('left', true);
+            player.anims.play('otherleft', true);
         }
         else if (movement["Right"]) {
             player.setVelocityX(160);
 
-            player.anims.play('right', true);
+            player.anims.play('otherright', true);
         }
         else {
             player.setVelocityX(0);
 
-            player.anims.play('turn');
+            player.anims.play('otherturn');
         }
 
         if ((movement["Jump"]) && player.body.touching.down) {
@@ -71,7 +71,7 @@ function start_multiplayer() {
                         update_movement(remote_players[data.id].player, data.movement);
                     }
                 } else {
-                    const new_player = go.physics.add.sprite(100, 450, 'dude');
+                    const new_player = go.physics.add.sprite(100, 450, 'dude2');
                     new_player.setBounce(0.1);
                     new_player.setCollideWorldBounds(true);
                     go.physics.add.collider(new_player, platforms);
