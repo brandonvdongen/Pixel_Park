@@ -1,6 +1,7 @@
 function update_hud() {
     scoreText.setText('Score: ' + score);
     roundText.setText('Round: ' + round);
+    playerCountText.setText('Players: ' + (Object.keys(remote_players).length));
 }
 
 function resetStars(stars) {
@@ -34,7 +35,7 @@ function collectStar(player, star) {
 
 function hitBomb(player, bomb) {
     if (!gameover) {
-        player.setVelocity(0, 100);
+        player.setVelocity(0, -300);
         player.setCollideWorldBounds(false);
         if (collider !== null) {
             collider.active = false;

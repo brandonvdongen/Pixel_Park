@@ -5,14 +5,20 @@ let player;
 
 let round = 1;
 let score = 0;
+
 let scoreText;
 let roundText;
+let playerCount = 1;
+let playerCountText;
 let bombs;
 
 let controls = {};
 let gameover = 0;
 
 let collider;
+let player_id;
+
+let go;
 
 const config = {
     type: Phaser.CANVAS,
@@ -54,7 +60,7 @@ function preload() {
     });
 
     this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
-    this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
+    // this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
     this.load.image('sky', 'assets/textures/world/sky.png');
     this.load.image('ground', 'assets/textures/world/platform.png');
     this.load.image('star', 'assets/textures/sprites/star.png');
@@ -104,7 +110,7 @@ function create() {
         frameRate: 10,
         repeat: -1
     });
-
+    go = this;
     collider = this.physics.add.collider(player, platforms);
     controls.arrows = this.input.keyboard.createCursorKeys();
 
@@ -120,12 +126,16 @@ function create() {
     stars = this.physics.add.group({
         key: 'star',
         repeat: 11,
-        setXY: {x: 12, y: 0, stepX: 70}
+        setXY: {x: 12, y: 0, stepX: 70},
+    });
+    stars.children.iterate(function (star) {
+        star.setBounce(.2);
     });
     this.physics.add.collider(stars, platforms);
     this.physics.add.overlap(player, stars, collectStar, null, this);
     scoreText = this.add.text(16, 10, 'Score: 0', {fontSize: '30px', fill: '#000'});
     roundText = this.add.text(16, 40, 'Round: 1', {fontSize: '30px', fill: '#000'});
+    playerCountText = this.add.text(16, 70, 'Players: 1', {fontSize: '30px', fill: '#000'});
 
     bombs = this.physics.add.group();
 
@@ -141,12 +151,11 @@ function create() {
     this.input.keyboard.on('keydown_Q', function (event) {
 
         if (collider !== null) {
-            collider.active=false;
+            collider.active = false;
         }
 
     });
-
-
+    running = true;
 }
 
 function update() {
