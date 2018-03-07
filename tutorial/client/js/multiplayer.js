@@ -15,7 +15,6 @@ function update_movement(player, movement) {
         }
         else {
             player.setVelocityX(0);
-
             player.anims.play('otherturn');
         }
 
@@ -65,15 +64,21 @@ function start_multiplayer() {
             if (data.id !== player_id) {
                 if (!remote_players[data.id]) remote_players[data.id] = data;
                 if (remote_players[data.id].player) {
-                    remote_players[data.id].player.setPosition(data.position.x, data.position.y + 25);
                     remote_players[data.id].movement = data.movement;
                     if (data.movement) {
                         update_movement(remote_players[data.id].player, data.movement);
                     }
+                    remote_players[data.id].player.setPosition(data.position.x, data.position.y);
+                    remote_players[data.id].player.setVelocity(data.velocity.x, data.velocity.y);
                 } else {
                     const new_player = go.physics.add.sprite(100, 450, 'dude2');
+                    new_player.setSize(20, 35);
+                    new_player.setOffset(5, 13);
                     new_player.setBounce(0.1);
                     new_player.setCollideWorldBounds(true);
+                    new_player.setMaxVelocity(160, 400);
+                    new_player.setDragX(350);
+                    new_player.update();
                     go.physics.add.collider(new_player, platforms);
                     remote_players[data.id].player = new_player;
                 }
@@ -86,11 +91,12 @@ function start_multiplayer() {
         const player_data = {};
         player_data.id = player_id;
         player_data.velocity = player.body.velocity;
-        player_data.position = player.body.position;
+        player_data.position = {x: player.x, y: player.y};
         player_data.movement = movement;
         socket.emit('update', player_data);
     }
 
+    player.setPosition(player.body.position.x, player.body.position.y);
     const keybinds = {
         KeyA: "Left",
         ArrowLeft: "Left",
@@ -116,12 +122,5 @@ function start_multiplayer() {
         }
     });
 
-    setInterval(() => {
-        for (let id in remote_players) {
-            if(remote_players[id].player && remote_players[id].movement){
-                console.log(remote_players[id].player.body.velocity);
-                update_movement(remote_players[id].player, remote_players[id].movement);
-            }
-        }
-    }, 100)
+
 }

@@ -20,15 +20,17 @@ let player_id;
 
 let go;
 
+let debug = false;
+
 const config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 800,
     height: 600,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: {y: 300},
-            debug: false
+            debug: debug
         }
     },
     scene: {
@@ -44,13 +46,8 @@ function preload() {
 
     let progress = this.add.graphics();
 
-    this.load.on('progress', function (value) {
-
-        progress.clear();
-        progress.fillStyle(0xffffff, 1);
-        progress.fillRect(0, 270, 800 * value, 60);
-        console.log("progress:", value);
-
+    this.load.on('fileprogress', function (file, value) {
+        console.log(value);
     });
 
     this.load.on('complete', function () {
@@ -60,7 +57,6 @@ function preload() {
     });
 
     this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
-    // this.load.audio('bgm_calm', 'assets/music/BlockMan_Cephelopod.mp3');
     this.load.image('sky', 'assets/textures/world/sky.png');
     this.load.image('ground', 'assets/textures/world/platform.png');
     this.load.image('star', 'assets/textures/sprites/star.png');
@@ -79,6 +75,7 @@ function create() {
     const game = this;
     let background_music = this.sound.add('bgm_calm');
     background_music.volume = 0.05;
+    background_music.loop = true;
     background_music.play();
     this.add.image(400, 300, 'sky');
 
@@ -92,6 +89,8 @@ function create() {
 
     player = this.physics.add.sprite(100, 450, 'dude');
 
+    player.setSize(20, 35);
+    player.setOffset(5, 13);
     player.setBounce(0.1);
     player.setCollideWorldBounds(true);
 
@@ -179,7 +178,6 @@ function create() {
         }
 
     });
-    running = true;
     start_multiplayer();
 
 }
@@ -198,12 +196,19 @@ function update() {
         }
         else {
             player.setVelocityX(0);
-
             player.anims.play('turn');
         }
 
         if ((controls.arrows.up.isDown || controls.wasd.up.isDown) && player.body.touching.down) {
             player.setVelocityY(-330);
+        }
+        for (let id in remote_players) {
+            if (remote_players.hasOwnProperty(id)) {
+                if (remote_players[id].player && remote_players[id].movement) {
+                    update_movement(remote_players[id].player, remote_players[id].movement);
+                }
+            }
+
         }
     }
 }
