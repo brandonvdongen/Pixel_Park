@@ -1,5 +1,3 @@
-import {bgmSongList} from "./../data/songs.js";
-
 let background_music;
 
 export function playBGM(game,key) {
@@ -9,5 +7,4 @@ export function playBGM(game,key) {
     background_music.volume = 0.1;
     background_music.loop = true;
     background_music.play();
-    console.log("playing :",bgmSongList[key].name,"By:",bgmSongList[key].author);
 }
