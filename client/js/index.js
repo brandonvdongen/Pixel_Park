@@ -59,8 +59,8 @@ function preload() {
 
     });
 
-    this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
-    // this.load.audio('bgm_panic', 'assets/music/BlockMan_Cephelopod.mp3');
+    // this.load.audio('bgm_calm', 'assets/music/Electrodoodle.mp3');
+    // this.load.audio('bgm_calm', 'assets/music/BlockMan_Cephelopod.mp3');
     this.load.image('sky', 'assets/textures/world/sky.png');
     this.load.image('ground', 'assets/textures/world/platform.png');
     this.load.image('star', 'assets/textures/sprites/star.png');
@@ -73,9 +73,9 @@ function preload() {
 
 function create() {
     const game = this;
-    let background_music = this.sound.add('bgm_calm');
-    background_music.volume = 0.05;
-    background_music.play();
+    // let background_music = this.sound.add('bgm_calm');
+    // background_music.volume = 0.05;
+    // background_music.play();
     this.add.image(400, 300, 'sky');
 
     platforms = this.physics.add.staticGroup();
@@ -161,7 +161,7 @@ function create() {
 }
 
 function update() {
-    if (!gameover) {
+    if (!gameover && controls) {
         if (controls.arrows.left.isDown || controls.wasd.left.isDown) {
             player.setVelocityX(-160);
 
