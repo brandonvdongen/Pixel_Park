@@ -48,8 +48,9 @@ export class MainMenu extends Phaser.Scene {
         this.load.on('complete', function () {
             preloader.classList.add("done");
             preloader.addEventListener("transitionend", () => {
-                preloader.removeEventListener("transitionend");
-                preloader.parentNode.removeChild(preloader);
+                if (preloader.parentNode) {
+                    preloader.parentNode.removeChild(preloader);
+                }
             });
         });
 
