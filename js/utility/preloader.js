@@ -17,7 +17,7 @@ function createPreloader() {
     document.body.appendChild(preloader);
 }
 
-export function update(file, value, loading, filesToLoad) {
+function update(file, value, loading, filesToLoad) {
     if (!preloader) createPreloader();
     let status_text;
     let totalProgress = 0;
@@ -27,7 +27,7 @@ export function update(file, value, loading, filesToLoad) {
         if (loading.hasOwnProperty(key)) {
             status_text = "Downloading (" + (filesLoaded + 1) + "/" + filesToLoad + ") " + key + ":" + Math.round(loading[key] * 100) + "%";
             totalProgress += loading[key];
-            progress.style.width = 800 * (totalProgress / filesToLoad) + "px";
+            progress.style.width = 600 * (totalProgress / filesToLoad) + "px";
         }
     }
 
@@ -40,8 +40,22 @@ export function done() {
     preloader.classList.add("done");
 }
 
-export function start() {
+export function start(game) {
+    let filesToLoad = 0;
     filesLoaded = 0;
     if (!preloader) createPreloader();
     preloader.classList.remove("done");
+
+    const loading = {};
+    game.load.on('fileprogress', function (file, value) {
+        filesToLoad = game.load.totalToLoad;
+        update(file, value, loading, filesToLoad);
+        console.log(file,value,loading,filesToLoad);
+    }.bind(this));
+
+    game.load.maxParallelDownloads = 1;
+    game.load.on('complete', function () {
+        done();
+    });
+
 }

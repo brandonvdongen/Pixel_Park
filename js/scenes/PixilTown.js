@@ -1,7 +1,7 @@
+import * as preloader from "../utility/preloader.js";
 import {bgmSongList} from "../data/songs.js";
 import {storage} from "../data/storage.js";
 import {playBGM} from "../functions/functions.js";
-import * as preloader from "../utility/preloader.js";
 
 export class TownPixil extends Phaser.Scene {
 
@@ -10,25 +10,13 @@ export class TownPixil extends Phaser.Scene {
     }
 
     preload() {
-        let filesToLoad;
-        let filesLoaded = 0;
-
         //todo replace preloader once preload rendering is fixed
-        preloader.start();
-
-        const loading = {};
-        this.load.on('fileprogress', function (file, value) {
-            filesToLoad = this.load.totalToLoad;
-            preloader.update(file, value, loading, filesToLoad);
-        }.bind(this));
-
-        this.load.maxParallelDownloads = 1;
-        this.load.on('complete', function () {
-            preloader.done();
-        });
+        preloader.start(this);
 
         this.load.audio("song_witchesGetBitches", bgmSongList.song_witchesGetBitches.src);
-        this.load.image('sky', 'assets/textures/world/sky.png');
+        // this.load.image('sky', 'assets/textures/world/sky.png');
+        this.load.image('tiles', 'assets/tilemaps/tiles/catastrophi_tiles_16.png');
+        this.load.tilemapCSV('map', 'assets/tilemap/PixilTown.csv');
     }
 
     create() {

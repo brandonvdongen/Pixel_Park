@@ -1,6 +1,6 @@
 //scenes
 import {MainMenu} from "../js/scenes/MainMenu.js"
-import {TownPixil} from "./scenes/TownPixil.js";
+import {TownPixil} from "./scenes/PixilTown.js";
 
 
 //data
@@ -15,7 +15,7 @@ console.log("resolution:", resolution);
 saveResolution();
 
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     width: resolution.width,
     height: resolution.height,
     scene: [MainMenu,TownPixil],
