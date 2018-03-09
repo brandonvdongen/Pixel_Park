@@ -1,5 +1,4 @@
 import * as preloader from "../utility/preloader.js";
-import {bgmSongList} from "../data/songs.js";
 import {storage} from "../data/storage.js";
 import {playBGM,randomSongKey} from "../functions/functions.js";
 
