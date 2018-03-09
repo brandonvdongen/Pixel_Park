@@ -19,6 +19,7 @@ let controls = {
     right: 0
 };
 let player;
+var debugGraphics;
 
 export class TownPixil extends Phaser.Scene {
 
@@ -34,7 +35,7 @@ export class TownPixil extends Phaser.Scene {
 
         //map
         this.load.image('Tiles_PixilTown', 'assets/tiles/PixilTown.png');
-        this.load.tilemapCSV('Map_PixilTown', 'assets/tilemap/PixilTown.csv');
+        this.load.tilemapJSON('Map_PixilTown', 'assets/tilemap/PixilTown.json');
 
         //player
         this.load.image('player', "assets/sprites/player.png")
@@ -46,8 +47,8 @@ export class TownPixil extends Phaser.Scene {
         const map = this.make.tilemap({key: 'Map_PixilTown', tileWidth: 32, tileHeight: 32});
         const tileset = map.addTilesetImage('Tiles_PixilTown');
         const ground_layer = map.createStaticLayer(0, tileset, 0, 0);
-        const bridge_layer = map.createStaticLayer(0, tileset, 0, 0);
-
+        const bridge_layer = map.createStaticLayer(1, tileset, 0, 0);
+        map.setLayer(ground_layer);
         map.setCollisionBetween(9, 11);
         map.setCollision(-1);
 
@@ -89,6 +90,9 @@ export class TownPixil extends Phaser.Scene {
             }
         });
 
+        debugGraphics = this.add.graphics();
+        drawDebug();
+
     }
 
     update(time, delta) {
@@ -113,4 +117,22 @@ export class TownPixil extends Phaser.Scene {
         // console.log(player.physics);
     }
 
+}
+
+function drawDebug ()
+{
+    var tileColor = showTiles ? new Phaser.Display.Color(105, 210, 231, 200) : null;
+    var colldingTileColor = showCollidingTiles ? new Phaser.Display.Color(243, 134, 48, 200) : null;
+    var faceColor = showFaces ? new Phaser.Display.Color(40, 39, 37, 255) : null;
+
+    debugGraphics.clear();
+
+    // Pass in null for any of the style options to disable drawing that component
+    map.renderDebug(debugGraphics, {
+        tileColor: tileColor,                   // Non-colliding tiles
+        collidingTileColor: colldingTileColor,  // Colliding tiles
+        faceColor: faceColor                    // Interesting faces, i.e. colliding edges
+    });
+
+    helpText.setText(getHelpMessage());
 }
