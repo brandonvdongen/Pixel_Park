@@ -22,18 +22,18 @@ body {
     justify-content: center;
     padding: 5px;
     height: 20px;
-    width: 800px;
+    width: 600px;
     background-color: grey;
     border-radius: 100px;
     position: absolute;
 }
 
 .preloader.done {
-    transition: all 1s;
     width: 0;
     overflow: hidden;
     padding-left: 0;
     padding-right: 0;
+    display: none;
 }
 
 .text {
