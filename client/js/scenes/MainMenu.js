@@ -1,6 +1,9 @@
 import * as preloader from "../utility/preloader.js";
 import {storage} from "../data/storage.js";
-import {playBGM,randomSongKey} from "../functions/functions.js";
+import {playBGM} from "../functions/functions.js";
+import {bgmSongList} from "../data/songs.js";
+import {connect} from "../modules/multiplayerController.js";
+import * as playerController from "../modules/playerController.js";
 
 export class MainMenu extends Phaser.Scene {
 
@@ -17,22 +20,31 @@ export class MainMenu extends Phaser.Scene {
         //     }
         // }
 
-        this.load.audio("song_XinyueTheme", "assets/music/The_J_Arthur_Keenes_Band_-_01_-_Xinyue_Theme_1.ogg");
+        this.load.audio("song_nontindeVendorTheme", bgmSongList.song_nontindeVendorTheme.src);
         this.load.image('menu_main', 'assets/textures/hud/mainmenu.png');
+
+        //player
+        playerController.preload(this);
     }
 
     create() {
+        storage.activeScene=this;
 
         this.menu = this.add.image(400, 300, 'menu_main');
-        Phaser.Display.Align.In.Center(this.menu, this.add.zone(window.innerWidth/2, window.innerHeight/2, storage.settings.resolution.width, storage.settings.resolution.height));
+        Phaser.Display.Align.In.Center(this.menu, this.add.zone(window.innerWidth / 2, window.innerHeight / 2, storage.settings.resolution.width, storage.settings.resolution.height));
         this.menu.setScale(2);
 
         this.sound.pauseOnBlur = false;
-        playBGM(this, "song_XinyueTheme");
+        playBGM(this, "song_nontindeVendorTheme");
 
         this.input.once('pointerdown', function (event) {
-            this.scene.start('TownPixil');
+            this.scene.start('PixilTown');
         }, this);
+
+        connect(this).then((data) => {
+            console.log(data);
+            this.scene.start(data.map);
+        });
 
     }
 

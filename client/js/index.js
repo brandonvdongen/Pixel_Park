@@ -1,5 +1,9 @@
+const version = 1;
+const game_name = "pixel_park";
+
 import {MainMenu} from "../js/scenes/MainMenu.js"
-import {TownPixil} from "./scenes/PixilTown.js";
+import {PixilTown} from "./scenes/PixilTown.js";
+import {Voxalia} from "./scenes/Voxalia.js";
 import {storage} from "./data/storage.js";
 
 //data
@@ -23,7 +27,7 @@ const config = {
             debug: false
         }
     },
-    scene: [MainMenu, TownPixil],
+    scene: [MainMenu, PixilTown, Voxalia],
     pixelArt: true
 };
 
@@ -35,3 +39,6 @@ window.onresize = function () {
         storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
     }
 };
+
+storage.version = version;
+storage.game_name = game_name;

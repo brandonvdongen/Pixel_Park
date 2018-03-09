@@ -7,27 +7,29 @@ import * as playerController from "../modules/playerController.js";
 let player;
 let map;
 
-export class PixilTown extends Phaser.Scene {
+export class Voxalia extends Phaser.Scene {
 
     constructor() {
-        super({key: 'PixilTown'});
+        super({key: 'Voxalia'});
     }
 
     preload() {
+        console.log("loading map");
         preloader.start(this);
         //bgm
-        this.load.audio("song_XinyueTheme", bgmSongList.song_XinyueTheme.src);
+        this.load.audio("song_bitBossa", bgmSongList.song_bitBossa.src);
         //map
-        this.load.image('PixilTown', 'assets/tiles/PixilTown.png');
-        this.load.tilemapTiledJSON('Map_PixilTown', 'assets/tilemap/PixilTown.json');
+        this.load.image('Voxalia', 'assets/tiles/Voxalia.png');
+        this.load.tilemapTiledJSON('Map_Voxalia', 'assets/tilemap/Voxalia.json');
 
     }
 
     create() {
-        storage.activeScene=this;
+        storage.activeScene = this;
 
-        map = this.make.tilemap({key: 'Map_PixilTown'});
-        const tileset = map.addTilesetImage('PixilTown');
+
+        map = this.make.tilemap({key: 'Map_Voxalia'});
+        const tileset = map.addTilesetImage('Voxalia');
         const ground_layer = map.createStaticLayer('Ground', tileset, 0, 0);
         const bridge_layer = map.createStaticLayer('Bridge', tileset, 0, 0);
         map.setLayer(ground_layer);
@@ -43,11 +45,11 @@ export class PixilTown extends Phaser.Scene {
         storage.mainCamera.setZoom(3);
 
         this.sound.pauseOnBlur = false;
-        playBGM(this, "song_XinyueTheme");
+        playBGM(this, "song_bitBossa");
 
-        const spawn = map.tileToWorldXY(2,2,{},storage.mainCamera,ground_layer);
-        spawn.x -= map.tileWidth/2;
-        spawn.y -= map.tileHeight/2;
+        const spawn = map.tileToWorldXY(2, 5, {}, storage.mainCamera, ground_layer);
+        spawn.x -= map.tileWidth / 2;
+        spawn.y -= map.tileHeight / 2;
         storage.player = playerController.createPlayer(this, spawn, "#ffffff");
         storage.cameraTarget = storage.player.sprite;
 
