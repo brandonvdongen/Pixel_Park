@@ -3,33 +3,17 @@
  <tileset firstgid="1" name="PixilTown" tilewidth="32" tileheight="32" tilecount="81" columns="9">
   <image source="../../tiles/PixilTown.png" width="288" height="288"/>
   <tile id="9">
-   <objectgroup draworder="index">
-    <object id="2" x="0" y="0">
-     <polyline points="0,0 0,16 32,16 32,0 0,0"/>
-    </object>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="10">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0">
-     <polyline points="0,0 0,16 32,16 32,0 0,0"/>
-    </object>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="11">
-   <objectgroup draworder="index">
-    <object id="2" x="0" y="0">
-     <polyline points="0,0 0,16 32,16 32,0 0,0"/>
-    </object>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="28" type="blo"/>
   <tile id="41">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0">
-     <polyline points="0,0 16,8 32,0 32,16 0,16 0,0"/>
-    </object>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
  </tileset>
  <layer name="Ground" width="50" height="50">
