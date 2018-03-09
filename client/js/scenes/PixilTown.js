@@ -4,6 +4,14 @@ import {storage} from "../data/storage.js";
 import {playBGM} from "../functions/functions.js";
 import {getKeyBind} from "../utility/keyBind.js";
 
+let tileData = {
+    pathways: [
+        18, 19, 20, 21, 22, 23,
+        27, 28, 29, 30, 31, 32,
+        36, 37, 38, 39, 40
+    ]
+}
+
 let controls = {
     up: 0,
     down: 0,
@@ -37,7 +45,8 @@ export class TownPixil extends Phaser.Scene {
 
         const map = this.make.tilemap({key: 'Map_PixilTown', tileWidth: 32, tileHeight: 32});
         const tileset = map.addTilesetImage('Tiles_PixilTown');
-        const layer = map.createStaticLayer(0, tileset, 0, 0);
+        const ground_layer = map.createStaticLayer(0, tileset, 0, 0);
+        const bridge_layer = map.createStaticLayer(0, tileset, 0, 0);
 
         map.setCollisionBetween(9, 11);
         map.setCollision(-1);
@@ -56,10 +65,14 @@ export class TownPixil extends Phaser.Scene {
         playBGM(this, "song_witchesGetBitches");
 
         player = this.physics.add.sprite(16, 16, 'player');
-        this.physics.add.collider(player, layer);
+        player.setSize(10, 10);
+        player.setOffset(3, 6);
+        this.physics.add.collider(player, ground_layer);
+        this.physics.add.collider(player, bridge_layer);
         player.setCollideWorldBounds(true);
         storage.mainCamera.startFollow(player);
         storage.mainCamera.setZoom(3);
+
 
 
         document.addEventListener("keydown", (ev) => {
@@ -96,6 +109,8 @@ export class TownPixil extends Phaser.Scene {
                 player.setVelocityX(0);
             }
         }
+        // console.clear();
+        // console.log(player.physics);
     }
 
 }

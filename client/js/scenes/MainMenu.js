@@ -24,7 +24,8 @@ export class MainMenu extends Phaser.Scene {
     create() {
 
         this.menu = this.add.image(400, 300, 'menu_main');
-        Phaser.Display.Align.In.Center(this.menu, this.add.zone(400, 300, storage.settings.resolution.width, storage.settings.resolution.height));
+        Phaser.Display.Align.In.Center(this.menu, this.add.zone(window.innerWidth/2, window.innerHeight/2, storage.settings.resolution.width, storage.settings.resolution.height));
+        this.menu.setScale(2);
 
         this.sound.pauseOnBlur = false;
         playBGM(this, "song_XinyueTheme");
