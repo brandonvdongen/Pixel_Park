@@ -5,7 +5,6 @@ import {playBGM} from "../functions/functions.js";
 
 let controls;
 let player;
-var iter = 3.14;
 export class TownPixil extends Phaser.Scene {
 
     constructor() {
@@ -36,17 +35,6 @@ export class TownPixil extends Phaser.Scene {
         storage.mainCamera = this.cameras.main;
         storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
 
-        // const cursors = this.input.keyboard.createCursorKeys();
-        // const controlConfig = {
-        //     camera: this.cameras.main,
-        //     left: cursors.left,
-        //     right: cursors.right,
-        //     up: cursors.up,
-        //     down: cursors.down,
-        //     speed: 0.5
-        // };
-        // controls = new Phaser.Cameras.Controls.Fixed(controlConfig);
-
         const help = this.add.text(16, 16, 'Help goes here', {
             fontSize: '18px',
             fill: '#ffffff'
@@ -65,10 +53,6 @@ export class TownPixil extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // controls.update(delta);
-        player.x = 250 + Math.cos(iter) * 200;
-        player.y = 310 + Math.sin(iter) * 200;
-        iter += 0.02;
     }
 
 }
