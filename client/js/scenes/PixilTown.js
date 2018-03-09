@@ -22,7 +22,7 @@ let player;
 let debugGraphics;
 let showTiles = false;
 let showCollidingTiles = false;
-let showFaces = false;
+let showFaces = true;
 let map;
 
 export class TownPixil extends Phaser.Scene {
@@ -56,7 +56,10 @@ export class TownPixil extends Phaser.Scene {
         ground_layer.setCollisionBetween(9, 11);
         ground_layer.setCollision(-1);
         // bridge_layer.setLayer(bridge_layer);
-        bridge_layer.setCollisionByExclusion([-1]);
+        ground_layer.setCollisionFromCollisionGroup();
+        bridge_layer.setCollisionFromCollisionGroup();
+        // bridge_layer.setCollisionByExclusion([-1]);
+
 
         storage.mainCamera = this.cameras.main;
         storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
