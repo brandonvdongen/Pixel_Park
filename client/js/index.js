@@ -12,13 +12,14 @@ let resolution = JSON.parse(localStorage.getItem("resolution")) || {height: 600,
 saveResolution();
 
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     width: window.innerWidth,
     height: window.innerHeight,
     physics: {
-        default: 'arcade',
-        arcade: {
+        default: 'matter',
+        matter: {
             gravity: {y: 0},
+            enableSleep: true,
             debug: false
         }
     },

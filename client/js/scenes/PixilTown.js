@@ -19,10 +19,6 @@ let controls = {
     right: 0
 };
 let player;
-let debugGraphics;
-let showTiles = false;
-let showCollidingTiles = false;
-let showFaces = true;
 let map;
 
 export class TownPixil extends Phaser.Scene {
@@ -53,12 +49,15 @@ export class TownPixil extends Phaser.Scene {
         const ground_layer = map.createStaticLayer('Ground', tileset, 0, 0);
         const bridge_layer = map.createStaticLayer('Bridge', tileset, 0, 0);
         map.setLayer(ground_layer);
-        ground_layer.setCollisionBetween(9, 11);
+        // ground_layer.setCollisionBetween(9, 11);
         ground_layer.setCollision(-1);
         // bridge_layer.setLayer(bridge_layer);
         ground_layer.setCollisionFromCollisionGroup();
         bridge_layer.setCollisionFromCollisionGroup();
         // bridge_layer.setCollisionByExclusion([-1]);
+        this.matter.world.convertTilemapLayer(ground_layer);
+        this.matter.world.convertTilemapLayer(bridge_layer);
+        this.matter.world.setBounds();
 
 
         storage.mainCamera = this.cameras.main;
@@ -74,15 +73,17 @@ export class TownPixil extends Phaser.Scene {
         this.sound.pauseOnBlur = false;
         playBGM(this, "song_witchesGetBitches");
 
-        player = this.physics.add.sprite(16, 16, 'player');
-        player.setSize(10, 10);
-        player.setOffset(3, 6);
-        this.physics.add.collider(player, ground_layer);
-        this.physics.add.collider(player, bridge_layer);
-        player.setCollideWorldBounds(true);
-        storage.mainCamera.startFollow(player);
+        player = this.matter.add.sprite(16, 16, 'player');
+        player.setBody({type: 'circle', radius: 5, width: 10, height: 10});
+        player.setFixedRotation();
+        player.body.position.y -= 3;
+        // player.setOffset(3, 6);
+        // this.matter.add.collider(player, ground_layer);
+        // this.matter.add.collider(player, bridge_layer);
+        // player.setCollideWorldBounds(true);
+        storage.cameraTarget = player;
+        // storage.mainCamera.startFollow(player);
         storage.mainCamera.setZoom(3);
-
 
 
         document.addEventListener("keydown", (ev) => {
@@ -98,48 +99,43 @@ export class TownPixil extends Phaser.Scene {
                 controls[button] = 0;
             }
         });
-
-        debugGraphics = this.add.graphics();
-        drawDebug();
+        this.matter.world.createDebugGraphic();
+        this.matter.world.drawDebug = false;
 
     }
 
     update(time, delta) {
         if (controls) {
             if (controls.up) {
-                player.setVelocityY(-100);
+                player.setVelocityY(-1);
             } else if (controls.down) {
-                player.setVelocityY(100);
+                player.setVelocityY(1);
             } else {
                 player.setVelocityY(0);
             }
 
             if (controls.left) {
-                player.setVelocityX(-100);
+                player.setVelocityX(-1);
             } else if (controls.right) {
-                player.setVelocityX(100);
+                player.setVelocityX(1);
             } else {
                 player.setVelocityX(0);
             }
         }
         // console.clear();
         // console.log(player.physics);
+        smoothMoveCameraTowards(storage.cameraTarget, 0.9);
     }
 
 }
 
-function drawDebug ()
-{
-    var tileColor = showTiles ? new Phaser.Display.Color(105, 210, 231, 200) : null;
-    var colldingTileColor = showCollidingTiles ? new Phaser.Display.Color(243, 134, 48, 200) : null;
-    var faceColor = showFaces ? new Phaser.Display.Color(40, 39, 37, 255) : null;
 
-    debugGraphics.clear();
-
-    // Pass in null for any of the style options to disable drawing that component
-    map.renderDebug(debugGraphics, {
-        tileColor: tileColor,                   // Non-colliding tiles
-        collidingTileColor: colldingTileColor,  // Colliding tiles
-        faceColor: faceColor                    // Interesting faces, i.e. colliding edges
-    });
+function smoothMoveCameraTowards(target, smoothFactor) {
+    if (target) {
+        if (smoothFactor === undefined) {
+            smoothFactor = 0;
+        }
+        storage.mainCamera.scrollX = smoothFactor * storage.mainCamera.scrollX + (1 - smoothFactor) * (target.x - storage.mainCamera.width * 0.5);
+        storage.mainCamera.scrollY = smoothFactor * storage.mainCamera.scrollY + (1 - smoothFactor) * (target.y - storage.mainCamera.height * 0.5);
+    }
 }
