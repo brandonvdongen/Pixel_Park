@@ -42,7 +42,7 @@ export class MainMenu extends Phaser.Scene {
         }, this);
 
         connect(this).then((data) => {
-            console.log(data);
+            storage.player.id = data.id;
             this.scene.start(data.map);
         });
 

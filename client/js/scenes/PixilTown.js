@@ -3,6 +3,7 @@ import {bgmSongList} from "../data/songs.js";
 import {storage} from "../data/storage.js";
 import {playBGM} from "../functions/functions.js";
 import * as playerController from "../modules/playerController.js";
+import * as multiplayerController from "../modules/multiplayerController.js";
 
 let player;
 let map;
@@ -14,6 +15,7 @@ export class PixilTown extends Phaser.Scene {
     }
 
     preload() {
+        console.log("loading map");
         preloader.start(this);
         //bgm
         this.load.audio("song_XinyueTheme", bgmSongList.song_XinyueTheme.src);
@@ -24,7 +26,7 @@ export class PixilTown extends Phaser.Scene {
     }
 
     create() {
-        storage.activeScene=this;
+        storage.activeScene = this;
 
         map = this.make.tilemap({key: 'Map_PixilTown'});
         const tileset = map.addTilesetImage('PixilTown');
@@ -45,9 +47,10 @@ export class PixilTown extends Phaser.Scene {
         this.sound.pauseOnBlur = false;
         playBGM(this, "song_XinyueTheme");
 
-        const spawn = map.tileToWorldXY(2,2,{},storage.mainCamera,ground_layer);
-        spawn.x -= map.tileWidth/2;
-        spawn.y -= map.tileHeight/2;
+        const spawn = map.tileToWorldXY(2, 2, {}, storage.mainCamera, ground_layer);
+        spawn.x -= map.tileWidth / 2;
+        spawn.y -= map.tileHeight / 2;
+        storage.sceneSpawn = spawn;
         storage.player = playerController.createPlayer(this, spawn, "#ffffff");
         storage.cameraTarget = storage.player.sprite;
 
@@ -62,6 +65,7 @@ export class PixilTown extends Phaser.Scene {
         player = storage.player.sprite;
         let controls = storage.controls;
         playerController.move_player(player, controls, player.body.position);
+        multiplayerController.update_multiplayers();
     }
 
 }
