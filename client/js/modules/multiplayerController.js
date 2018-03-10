@@ -53,7 +53,7 @@ export function connect(game) {
             }
             data.sprite = storage.multiplayer[data.id].sprite;
             storage.multiplayer[data.id] = data;
-            update_multiplayers(data.position);
+            playerController.move_player(data.sprite, data.controls, data.position);
         });
 
     });
@@ -64,32 +64,32 @@ export function update_multiplayers(pos) {
         if (storage.multiplayer.hasOwnProperty(id)) {
             const player = storage.multiplayer[id].sprite;
             const controls = storage.multiplayer[id].controls;
-            const position = pos || player.body.position;
-            player.setPosition(position.x, position.y);
+            const position = pos || {x:player.x,y:player.y};
+            if(position)player.setPosition(position.x, position.y);
             player.setVelocity(0, 0);
             let walking = false;
             if (controls && player) {
                 if (controls.up) {
-                    player.setVelocityY(-1);
+                    player.setVelocityY(-100);
                     walking = true;
                 } else if (controls.down) {
-                    player.setVelocityY(1);
+                    player.setVelocityY(100);
                     walking = true;
                 } else {
                     player.setVelocityY(0);
                 }
                 if (controls.left) {
-                    player.setVelocityX(-1);
+                    player.setVelocityX(-100);
                     walking = true;
                 } else if (controls.right) {
-                    player.setVelocityX(1);
+                    player.setVelocityX(100);
                     walking = true;
                 } else {
                     player.setVelocityX(0);
                 }
                 if (walking) player.anims.play('hop', true);
                 else player.anims.play('idle', true);
-                player.depth = player.body.position.y;
+                player.depth = player.y;
             }
         }
     }
@@ -99,6 +99,7 @@ export function update() {
     if (socket) {
         const playerdata = JSON.parse(JSON.stringify(storage.player));
         delete playerdata.sprite;
+        console.log(playerdata);
         socket.emit("update", playerdata);
     }
 }

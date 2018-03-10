@@ -1,4 +1,4 @@
-const version = 1;
+const version = 2;
 const game_name = "pixel_park";
 
 import {MainMenu} from "../js/scenes/MainMenu.js"
@@ -20,10 +20,9 @@ const config = {
     width: window.innerWidth,
     height: window.innerHeight,
     physics: {
-        default: 'matter',
-        matter: {
+        default: 'arcade',
+        arcade: {
             gravity: {y: 0},
-            enableSleep: true,
             debug: false
         }
     },

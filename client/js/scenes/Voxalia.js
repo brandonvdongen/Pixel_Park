@@ -33,12 +33,12 @@ export class Voxalia extends Phaser.Scene {
         const ground_layer = map.createStaticLayer('Ground', tileset, 0, 0);
         const bridge_layer = map.createStaticLayer('Bridge', tileset, 0, 0);
         map.setLayer(ground_layer);
+        ground_layer.setCollisionBetween(9, 11);
         ground_layer.setCollision(-1);
         ground_layer.setCollisionFromCollisionGroup();
         bridge_layer.setCollisionFromCollisionGroup();
-        this.matter.world.convertTilemapLayer(ground_layer);
-        this.matter.world.convertTilemapLayer(bridge_layer);
-        this.matter.world.setBounds();
+        // this.physics.world.setBounds();
+
 
         storage.mainCamera = this.cameras.main;
         storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
@@ -52,6 +52,8 @@ export class Voxalia extends Phaser.Scene {
         spawn.y -= map.tileHeight / 2;
         storage.sceneSpawn = spawn;
         storage.player = playerController.createPlayer(this, spawn, "#ffffff");
+        this.physics.add.collider(storage.player.sprite, ground_layer);
+        this.physics.add.collider(storage.player.sprite, bridge_layer);
         storage.cameraTarget = storage.player.sprite;
 
 
@@ -64,7 +66,8 @@ export class Voxalia extends Phaser.Scene {
         smoothMoveCameraTowards(storage.cameraTarget, 0.9);
         player = storage.player.sprite;
         let controls = storage.controls;
-        playerController.move_player(player, controls, player.body.position);
+        player.position = {x:player.x,y:player.y};
+        playerController.move_player(player, controls, player.position);
         multiplayerController.update_multiplayers();
     }
 

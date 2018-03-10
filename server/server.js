@@ -1,6 +1,6 @@
 /** @namespace io.sockets */
 
-let version = 1;
+let version = 2;
 let game_name = "pixel_park";
 
 //////start of socket.io setup code///////////
