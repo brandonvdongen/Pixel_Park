@@ -4,8 +4,7 @@
   "description": "a server for a game i'm working on",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js",
-    "start": "node server/server.js"
+    "build": "grunt"
   },
   "repository": {
     "type": "git",
@@ -21,5 +20,17 @@
     "phaser": "^3.2.0",
     "socket.io": "^2.0.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "file-loader": "^1.1.11",
+    "grunt": "^1.0.2",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-htmlmin": "^2.4.0",
+    "grunt-targethtml": "^0.2.6",
+    "grunt-webpack": "^3.0.2",
+    "load-grunt-tasks": "^3.5.2",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11"
+  }
 }

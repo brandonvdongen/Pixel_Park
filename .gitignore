@@ -9,3 +9,7 @@ node_modules/*
 realtimeMP
 realtimeMP/
 realtimeMP/*
+
+dist
+dist/
+dist/*
