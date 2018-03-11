@@ -9,6 +9,7 @@ export function preload(game) {
     game.load.image('player', "assets/sprites/player.png");
     game.load.spritesheet('player_idle', "assets/sprites/player_idle.png", {frameWidth: 32, frameHeight: 32});
     game.load.spritesheet('player_hop', "assets/sprites/player_hop.png", {frameWidth: 32, frameHeight: 32});
+    game.load.spritesheet('player_spawn', "assets/sprites/player_spawn.png", {frameWidth: 32, frameHeight: 32});
 
     game.load.on("complete", () => {
         game.anims.create({
@@ -22,6 +23,24 @@ export function preload(game) {
             frames: game.anims.generateFrameNumbers('player_hop', {start: 0, end: 6}),
             frameRate: 12,
             repeat: -1
+        });
+        game.anims.create({
+            key: 'spawn',
+            frames: game.anims.generateFrameNumbers('player_spawn', {start: 0, end: 14}),
+            frameRate: 12,
+            repeat: 0,
+            onComplete: function (player) {
+                console.log("player spawned");
+            }
+        });
+        game.anims.create({
+            key: 'delete',
+            frames: game.anims.generateFrameNumbers('player_spawn', {frames: [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]}),
+            frameRate: 12,
+            repeat: 0,
+            onComplete: function (player) {
+                player.destroy();
+            }
         });
         let controls = storage.controls;
         if (!started) {
@@ -46,8 +65,7 @@ export function preload(game) {
 }
 
 export function move_player(player, controls, position) {
-    if(position)player.setPosition(position.x, position.y);
-    let walking = false;
+    if (position) player.setPosition(position.x, position.y);
     if (controls && player && storage.player) {
         if (controls.up) {
             player.setVelocityY(-100);
@@ -67,18 +85,26 @@ export function move_player(player, controls, position) {
         } else {
             player.setVelocityX(0);
         }
-        if (walking) player.anims.play('hop', true);
-        else player.anims.play('idle', true);
-        if(player.position)player.depth = player.position.y;
+        if (walking) {
+            player.anims.play('hop', true);
+            player.walking = true;
+        }
+        else if (player.walking === true) {
+            player.anims.play('idle', true);
+            player.walking = false;
+        }
+        if (player.position) player.depth = player.position.y;
         storage.player.controls = controls;
         storage.player.position = player.position;
     }
+    let walking = false;
 }
 
 export function createPlayer(game, origin, color) {
     const player = new PlayerController(game, origin, color);
     let controls = storage.controls;
     move_player(player.sprite, controls, player.sprite.position);
+    player.anims.play("spawn", true);
     return player;
 }
 

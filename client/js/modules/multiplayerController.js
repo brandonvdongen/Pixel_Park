@@ -41,7 +41,7 @@ export function connect(game) {
 
         socket.on("left", (data) => {
             if (storage.multiplayer[data.id]) {
-                storage.multiplayer[data.id].sprite.destroy();
+                player.anims.play("delete", true);
                 delete storage.multiplayer[data.id];
             }
             console.log("left", data);
