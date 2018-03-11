@@ -7,7 +7,6 @@ import {Voxalia} from "./scenes/Voxalia.js";
 import {storage} from "./data/storage.js";
 
 //data
-
 function saveResolution() {
     localStorage.setItem("resolution", JSON.stringify(resolution));
 }

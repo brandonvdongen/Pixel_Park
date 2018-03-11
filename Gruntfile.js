@@ -4,12 +4,19 @@ process.env.NODE_ENV = 'production';
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
     grunt.initConfig({
+        targethtml: {
+            dist: {
+                files: {
+                    'dist/index.html': 'client/index.html'
+                }
+            }
+        },
         copy: {
             dist: {
                 files: [
                     // includes files within path and its sub-directories
                     {expand: true, cwd:'client/assets', src: ['**'], dest: 'dist/assets'},
-                    {expand: true, flatten: true, src: ['client/js/phaser.js'], dest: 'dist/js'},
+                    {expand: true, flatten: true, src: ['client/js/temp/phaser.js'], dest: 'dist/js/temp'},
                 ],
             },
         },
@@ -27,7 +34,7 @@ module.exports = function (grunt) {
                     collapseWhitespace: true
                 },
                 files: {                                   // Dictionary of files
-                    'dist/index.html': 'client/index.html',     // 'destination': 'source'
+                    'dist/index.html': 'dist/index.html',     // 'destination': 'source'
                 }
             }
         },
@@ -84,12 +91,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-targethtml');
 
     grunt.registerTask('build', [
         'clean',
         // 'babel',
         // 'uglify',
         'cssmin',
+        'targethtml:dist',
         'htmlmin',
         'webpack:prod',
         'copy'
