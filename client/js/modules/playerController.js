@@ -64,7 +64,9 @@ export function preload(game) {
     });
 }
 
+
 export function move_player(player, controls, position) {
+    let walking = false;
     if (position) player.setPosition(position.x, position.y);
     if (controls && player && storage.player) {
         if (controls.up) {
@@ -97,14 +99,13 @@ export function move_player(player, controls, position) {
         storage.player.controls = controls;
         storage.player.position = player.position;
     }
-    let walking = false;
 }
 
 export function createPlayer(game, origin, color) {
     const player = new PlayerController(game, origin, color);
     let controls = storage.controls;
     move_player(player.sprite, controls, player.sprite.position);
-    player.anims.play("spawn", true);
+    player.sprite.anims.play("spawn", true);
     return player;
 }
 

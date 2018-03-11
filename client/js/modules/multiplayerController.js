@@ -37,11 +37,12 @@ export function connect(game) {
         socket.on("joined", (data) => {
             console.log("joined", data);
             storage.multiplayer[data.id] = playerController.createPlayer(storage.activeScene, storage.sceneSpawn, "#ffffff");
+            storage.multiplayer[data.id].sprite.anims.play("spawn", true);
         });
 
         socket.on("left", (data) => {
             if (storage.multiplayer[data.id]) {
-                player.anims.play("delete", true);
+                storage.multiplayer[data.id].sprite.anims.play("delete", true);
                 delete storage.multiplayer[data.id];
             }
             console.log("left", data);
@@ -64,8 +65,8 @@ export function update_multiplayers(pos) {
         if (storage.multiplayer.hasOwnProperty(id)) {
             const player = storage.multiplayer[id].sprite;
             const controls = storage.multiplayer[id].controls;
-            const position = pos || {x:player.x,y:player.y};
-            if(position)player.setPosition(position.x, position.y);
+            const position = pos || {x: player.x, y: player.y};
+            if (position) player.setPosition(position.x, position.y);
             player.setVelocity(0, 0);
             let walking = false;
             if (controls && player) {
@@ -87,9 +88,15 @@ export function update_multiplayers(pos) {
                 } else {
                     player.setVelocityX(0);
                 }
-                if (walking) player.anims.play('hop', true);
-                else player.anims.play('idle', true);
-                player.depth = player.y;
+                if (walking) {
+                    player.anims.play('hop', true);
+                    player.walking = true;
+                }
+                else if (player.walking === true) {
+                    player.anims.play('idle', true);
+                    player.walking = false;
+                }
+                if (player.position) player.depth = player.position.y;
             }
         }
     }
