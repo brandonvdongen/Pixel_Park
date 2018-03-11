@@ -1,4 +1,5 @@
-{ "height":50,
+{ "backgroundcolor":"#1aceff",
+ "height":50,
  "infinite":false,
  "layers":[
         {
@@ -36,7 +37,7 @@
          "imageheight":288,
          "imagewidth":288,
          "margin":0,
-         "name":"PixilTown",
+         "name":"Tiles_PixilTown",
          "spacing":0,
          "tilecount":81,
          "tileheight":32,

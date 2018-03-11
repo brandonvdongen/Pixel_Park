@@ -38,37 +38,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        // babel: {
-        //     options: {
-        //         sourceMap: false,
-        //         presets: ['env']
-        //     },
-        //     dist: {
-        //         files: [
-        //             {
-        //                 expand: true,
-        //                 cwd: 'client/',
-        //                 src: ["js/*.js"],
-        //                 dest: 'babel/'
-        //             }
-        //         ]
-        //     }
-        // },
-        // uglify: {
-        //     options: {
-        //         mangle: false
-        //     },
-        //     my_target: {
-        //         files: [
-        //             {
-        //                 expand: true,
-        //                 cwd: 'babel/',
-        //                 src: ["js/*.js"],
-        //                 dest: 'dist/'
-        //             }
-        //         ]
-        //     }
-        // },
         cssmin: {
             target: {
                 files: [{
@@ -86,7 +55,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-webpack');
-    // grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');

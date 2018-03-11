@@ -44,6 +44,7 @@ export class MainMenu extends Phaser.Scene {
         connect(this).then((data) => {
             storage.player.id = data.id;
             this.scene.start(data.map);
+            // this.scene.start('Voxalia');
         });
 
     }

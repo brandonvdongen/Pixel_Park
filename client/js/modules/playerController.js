@@ -94,6 +94,7 @@ export function move_player(player, controls, position) {
         else if (player.walking === true) {
             player.anims.play('idle', true);
             player.walking = false;
+            if (position) player.setPosition(position.x, position.y);
         }
         if (player.position) player.depth = player.position.y;
         storage.player.controls = controls;
@@ -101,8 +102,8 @@ export function move_player(player, controls, position) {
     }
 }
 
-export function createPlayer(game, origin, color) {
-    const player = new PlayerController(game, origin, color);
+export function createPlayer(game, map, color) {
+    const player = new PlayerController(game, map, color);
     let controls = storage.controls;
     move_player(player.sprite, controls, player.sprite.position);
     player.sprite.anims.play("spawn", true);
@@ -110,16 +111,18 @@ export function createPlayer(game, origin, color) {
 }
 
 class PlayerController {
-    constructor(game, origin = {x: 100, y: 100}, color = "#ffffff") {
+    constructor(game, map = {spawn: {x: 100, y: 100}}, color = "#ffffff") {
         this.id = storage.player.id;
         this.color = color;
         this.sprite = game.physics.add.sprite(16, 16, 'player');
         this.sprite.setSize(10, 10);
         this.sprite.setOffset(11, 14);
-        this.sprite.setPosition(origin.x, origin.y);
+        this.sprite.setPosition(map.spawn.x, map.spawn.y);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
-        // this.sprite.body.position.y -= 3;
+        map.layers.forEach((layer) => {
+            game.physics.add.collider(this.sprite, layer.tilemapLayer);
+        });
         this.position = origin;
         this.controls = {
             up: 0,

@@ -4,6 +4,7 @@ import {storage} from "../data/storage.js";
 import {playBGM} from "../functions/functions.js";
 import * as playerController from "../modules/playerController.js";
 import * as multiplayerController from "../modules/multiplayerController.js";
+import {drawDebug} from "../utility/debugger.js";
 
 let player;
 let map;
@@ -32,7 +33,7 @@ export class Voxalia extends Phaser.Scene {
         const tileset = map.addTilesetImage('Voxalia');
         const ground_layer = map.createStaticLayer('Ground', tileset, 0, 0);
         const bridge_layer = map.createStaticLayer('Bridge', tileset, 0, 0);
-        map.setLayer(ground_layer);
+        // map.setLayer(ground_layer);
         ground_layer.setCollisionBetween(9, 11);
         ground_layer.setCollision(-1);
         ground_layer.setCollisionFromCollisionGroup();
@@ -47,18 +48,20 @@ export class Voxalia extends Phaser.Scene {
         this.sound.pauseOnBlur = false;
         playBGM(this, "song_bitBossa");
 
-        const spawn = map.tileToWorldXY(2, 5, {}, storage.mainCamera, ground_layer);
-        spawn.x -= map.tileWidth / 2;
-        spawn.y -= map.tileHeight / 2;
-        storage.sceneSpawn = spawn;
-        storage.player = playerController.createPlayer(this, spawn, "#ffffff");
-        this.physics.add.collider(storage.player.sprite, ground_layer);
-        this.physics.add.collider(storage.player.sprite, bridge_layer);
+        map.spawn = map.tileToWorldXY(2, 5, {}, storage.mainCamera, ground_layer);
+        map.spawn.x -= map.tileWidth / 2;
+        map.spawn.y -= map.tileHeight / 2;
+        storage.sceneSpawn = map;
+        storage.player = playerController.createPlayer(this, map, "#ffffff");
+        console.log(ground_layer);
+        // this.physics.add.collider(storage.player.sprite, ground_layer);
+        // this.physics.add.collider(storage.player.sprite, bridge_layer);
         storage.cameraTarget = storage.player.sprite;
+        map.setLayer(0);
+        drawDebug(this,map);
 
-
-        this.matter.world.createDebugGraphic();
-        this.matter.world.drawDebug = false;
+        // this.matter.world.createDebugGraphic();
+        // this.matter.world.drawDebug = false;
 
     }
 

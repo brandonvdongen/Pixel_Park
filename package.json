@@ -21,8 +21,11 @@
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "file-loader": "^1.1.11",
     "grunt": "^1.0.2",
+    "grunt-babel": "^7.0.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^2.2.1",

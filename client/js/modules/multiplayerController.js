@@ -30,7 +30,6 @@ export function connect(game) {
         });
 
         socket.on("change_map", (data) => {
-            console.log(data);
             storage.activeScene.scene.start(data.map);
         });
 
@@ -106,7 +105,6 @@ export function update() {
     if (socket) {
         const playerdata = JSON.parse(JSON.stringify(storage.player));
         delete playerdata.sprite;
-        console.log(playerdata);
         socket.emit("update", playerdata);
     }
 }
