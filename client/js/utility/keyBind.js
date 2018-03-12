@@ -2,7 +2,8 @@ const keyBinds = {
     KeyW: "up",
     KeyA: "left",
     KeyS: "down",
-    KeyD: "right"
+    KeyD: "right",
+    KeyE: "interact"
 };
 
 export function getKeyBind(key) {

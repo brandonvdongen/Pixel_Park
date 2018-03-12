@@ -35,7 +35,7 @@ export function connect(game) {
 
         socket.on("joined", (data) => {
             console.log("joined", data);
-            storage.multiplayer[data.id] = playerController.createPlayer(storage.activeScene, storage.sceneSpawn, "#ffffff");
+            storage.multiplayer[data.id] = playerController.createPlayer(game, storage.activeScene, "#ffffff");
             storage.multiplayer[data.id].sprite.anims.play("spawn", true);
         });
 
@@ -49,7 +49,9 @@ export function connect(game) {
 
         socket.on("update", (data) => {
             if (!storage.multiplayer[data.id]) {
-                storage.multiplayer[data.id] = playerController.createPlayer(storage.activeScene, data.position, "#ffffff");
+                const map = storage.activeScene;
+                map.spawn = data.position;
+                storage.multiplayer[data.id] = playerController.createPlayer(game, map, "#ffffff");
             }
             data.sprite = storage.multiplayer[data.id].sprite;
             storage.multiplayer[data.id] = data;

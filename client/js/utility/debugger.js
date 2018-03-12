@@ -1,3 +1,5 @@
+let mouseDown = false;
+
 export function drawDebug(game, map) {
     if (debugGraphics) {
         debugGraphics.clear();
@@ -37,12 +39,16 @@ export function propertyCursor(game, map) {
     marker.x = map.tileToWorldX(pointerTileX);
     marker.y = map.tileToWorldY(pointerTileY);
 
-    if (game.input.manager.activePointer.isDown) {
-        const tile = map.getTileAt(pointerTileX, pointerTileY);
-
-        if (tile) {
-            // Note: JSON.stringify will convert the object tile properties to a string
-            console.log('Properties: ', tile.properties);
-        }
+    if (game.input.manager.activePointer.isDown && !mouseDown) {
+        mouseDown = true;
+        map.layers.forEach((layer) => {
+            map.setLayer(layer.name);
+            const tile = map.getTileAt(pointerTileX, pointerTileY);
+            if (tile) {
+                console.log('Properties: ', tile.properties);
+            }
+        });
+    } else if (!game.input.manager.activePointer.isDown && mouseDown) {
+        mouseDown = false;
     }
 }
