@@ -36,17 +36,20 @@ export function createMap(game, files) {
     files.map.layers.forEach((layer, index) => {
         const tileset = map.addTilesetImage(layer.key);
         layers[layer.name] = map.createStaticLayer(layer.name, tileset, 0, 0);
-        // layers[layer.name].setCollisionBetween(9, 11);
-        // layers[layer.name].setCollision(-1);
         layers[layer.name].setCollisionByProperty({collides: true});
-        if(index===0)layers[layer.name].depth = 0;
+        if (index === 0) layers[layer.name].depth = 0;
         else layers[layer.name].depth = 1000;
-        // layers[layer.name].getTilesWithin(0, 0, layers[layer.name].width, layers[layer.name].height, null, layers[layer.name]).forEach((value, index2) => {
-        //    console.log(value,value.y);
-        // });
-    });
 
-    map.spawn = map.tileToWorldXY(2, 5, {}, storage.mainCamera, layers["Ground"]);
+    });
+    const layer = layers["Ground"];
+    map.getTilesWithin(0, 0, layer.width, layer.height, {}, layer).forEach((value, index) => {
+        if (value.properties) {
+            if (value.properties.spawn) {
+                console.log(value.x);
+                map.spawn = map.tileToWorldXY(value.x+1, value.y+1, {}, storage.mainCamera, layer);
+            }
+        }
+    });
     return map;
 }
 

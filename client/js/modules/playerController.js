@@ -31,6 +31,7 @@ export function preload(game) {
             repeat: 0,
             onComplete: function (player) {
                 console.log("player spawned");
+                console.log(storage);
             }
         });
         game.anims.create({
