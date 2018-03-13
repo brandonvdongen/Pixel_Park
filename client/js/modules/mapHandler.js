@@ -1,6 +1,5 @@
 import * as debug from "../utility/debugger.js";
 
-const layers = {};
 
 function process(game, files, type) {
     if (type === "load_map") {

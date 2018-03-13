@@ -1,7 +1,31 @@
 import {getKeyBind} from "../utility/keyBind.js";
+import {storage} from "../data/storage.js";
 
 let started = false;
 
+
+export function init() {
+    if (!started) {
+        const controls = storage.controls;
+        document.addEventListener("keydown", (ev) => {
+            const button = getKeyBind(ev.code);
+            if (!controls[button] && button !== undefined) {
+                controls[button] = 1;
+                if (button === "interact") {
+                    interact(getTileUnderPlayer(game));
+                }
+            }
+        });
+
+        document.addEventListener("keyup", (ev) => {
+            const button = getKeyBind(ev.code);
+            if (controls[button]) {
+                controls[button] = 0;
+            }
+        });
+        started = true;
+    }
+}
 
 export function preload(game) {
     game.load.image('player', "assets/sprites/player.png");
@@ -56,45 +80,31 @@ export function createPlayer(game, position, color) {
     player.sprite.moveBlock.push("animation_spawn");
     player.sprite.anims.play("spawn", true);
 
-    if (!started) {
-        const controls = player.controls;
-        document.addEventListener("keydown", (ev) => {
-            const button = getKeyBind(ev.code);
-            if (!controls[button] && button !== undefined) {
-                controls[button] = 1;
-            }
-        });
-
-        document.addEventListener("keyup", (ev) => {
-            const button = getKeyBind(ev.code);
-            if (controls[button]) {
-                controls[button] = 0;
-            }
-        });
-        started = true;
-    }
-
     return player;
 }
 
-export function updatePlayerMovement(game, controls, position) {
+export function updatePlayerMovement(game, player, controls, target) {
     let walking = false;
-    const player = game.player.sprite;
+    player = player.sprite;
+    // const player = game.player.sprite;
+    const speed = player.speed;
+    const position = player.position;
+    console.log(controls);
     if (controls && player && player.moveBlock.length <= 0) {
         if (controls.up) {
-            player.setVelocityY(-100);
+            player.setVelocityY(-speed);
             walking = true;
         } else if (controls.down) {
-            player.setVelocityY(100);
+            player.setVelocityY(speed);
             walking = true;
         } else {
             player.setVelocityY(0);
         }
         if (controls.left) {
-            player.setVelocityX(-100);
+            player.setVelocityX(-speed);
             walking = true;
         } else if (controls.right) {
-            player.setVelocityX(100);
+            player.setVelocityX(speed);
             walking = true;
         } else {
             player.setVelocityX(0);
@@ -106,9 +116,9 @@ export function updatePlayerMovement(game, controls, position) {
         else if (player.walking === true) {
             player.anims.play('idle', true);
             player.walking = false;
-            if (position) player.setPosition(position.x, position.y);
+            if (target && !player.you) player.setPosition(target.x, target.y);
         }
-        if (!walking && position) {
+        if (position) {
             const map = game.map;
             const tileXY = map.worldToTileXY(position.x, position.y);
             const worldXY = map.tileToWorldXY(tileXY.x, tileXY.y);
@@ -117,7 +127,12 @@ export function updatePlayerMovement(game, controls, position) {
                 map.setLayer(layer.name);
                 const tile = map.getTileAt(tileXY.x, tileXY.y);
                 if (tile) {
-                    if (tile.properties.align === true) {
+                    if (tile.properties.speed) {
+                        player.speed = tile.properties.speed;
+                    } else {
+                        player.speed = player.defaultSpeed;
+                    }
+                    if (!walking && tile.properties.align === true) {
                         const target = {
                             x: ((position.x - worldXY.x - (layer.baseTileWidth / 2)) * smoothFactor),
                             y: ((position.y - worldXY.y - (layer.baseTileHeight / 2)) * smoothFactor)
@@ -131,8 +146,24 @@ export function updatePlayerMovement(game, controls, position) {
     }
 }
 
+export function getTileUnderPlayer(game) {
+    const tileData = {};
+    const map = game.map;
+    const tileXY = map.worldToTileXY(game.player.sprite.x, game.player.sprite.y);
+    map.layers.forEach((layer) => {
+        map.setLayer(layer.name);
+        const tile = map.getTileAt(tileXY.x, tileXY.y);
+        if (tile) {
+            Object.assign(tileData, tile);
+        }
+    });
+    return tileData;
+}
+
 export function interact(tile) {
-    console.log(tile);
+    if (tile.properties.teleporter) {
+        console.log("woosh@", tile.properties.map, ":", tile.properties.destination);
+    }
 }
 
 class PlayerController {
@@ -145,13 +176,8 @@ class PlayerController {
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
         this.sprite.moveBlock = [];
-        this.position = position;
-        this.controls = {
-            up: 0,
-            down: 0,
-            left: 0,
-            right: 0,
-            interact: 0
-        }
+        this.sprite.defaultSpeed = 100;
+        this.sprite.speed = 100;
+        this.sprite.position = position;
     }
 }

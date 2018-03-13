@@ -3,6 +3,7 @@ import {bgmSongList} from "../data/songs.js";
 import * as playerController from "../modules/playerController.js";
 import * as mapHandler from "../modules/mapHandler.js";
 import * as cameraController from "../modules/cameraController.js";
+import {storage} from "../data/storage.js";
 
 let map;
 let player;
@@ -61,7 +62,7 @@ export class PixilTown extends Phaser.Scene {
     update(time, delta) {
         cameraController.smoothCamera(this, .9);
         mapHandler.updateMap(this);
-        playerController.updatePlayerMovement(this, this.player.controls, this.player.sprite);
+        playerController.updatePlayerMovement(this, this.player, storage.controls, this.player.sprite);
     }
 
 }

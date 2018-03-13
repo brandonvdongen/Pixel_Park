@@ -16,3 +16,10 @@ export function setCameraToWorldXY(game, target) {
     camera.scrollX = camera.scrollX + (target.x - camera.width * 0.5);
     camera.scrollY = camera.scrollY + (target.y - camera.height * 0.5);
 }
+
+
+window.onresize = function () {
+    if (game.cameras.main) {
+        game.cameras.main.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    }
+};

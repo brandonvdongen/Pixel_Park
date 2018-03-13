@@ -27,7 +27,7 @@ export class Voxalia extends Phaser.Scene {
     }
 
     create() {
-        storage.activeScene = this;
+        storage.map = this;
 
         map = this.make.tilemap({key: 'Map_Voxalia'});
         const tileset = map.addTilesetImage('Voxalia');
@@ -51,7 +51,7 @@ export class Voxalia extends Phaser.Scene {
         map.spawn = map.tileToWorldXY(2, 5, {}, storage.mainCamera, ground_layer);
         map.spawn.x -= map.tileWidth / 2;
         map.spawn.y -= map.tileHeight / 2;
-        storage.sceneSpawn = map;
+        storage.map = map;
         storage.player = playerController.createPlayer(this, map, "#ffffff");
         console.log(ground_layer);
         // this.physics.add.collider(storage.player.sprite, ground_layer);

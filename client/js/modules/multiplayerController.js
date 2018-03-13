@@ -3,7 +3,8 @@ import * as playerController from "./playerController.js";
 
 let socket;
 
-export function connect(game) {
+export function connect(menu) {
+    if (!storage.game) storage.game = menu;
     return new Promise(function (resolve, reject) {
         socket = io('https://brandonvdongen.nl:8000');
 
@@ -30,12 +31,13 @@ export function connect(game) {
         });
 
         socket.on("change_map", (data) => {
-            storage.activeScene.scene.start(data.map);
+            map.scene.start(data.map);
         });
 
         socket.on("joined", (data) => {
             console.log("joined", data);
-            storage.multiplayer[data.id] = playerController.createPlayer(game, storage.activeScene, "#ffffff");
+            console.log(storage.game);
+            storage.multiplayer[data.id] = playerController.createPlayer(storage.game, storage.game.map.spawn, "#ffffff");
             storage.multiplayer[data.id].sprite.anims.play("spawn", true);
         });
 
@@ -49,9 +51,8 @@ export function connect(game) {
 
         socket.on("update", (data) => {
             if (!storage.multiplayer[data.id]) {
-                const map = storage.activeScene;
                 map.spawn = data.position;
-                storage.multiplayer[data.id] = playerController.createPlayer(game, map, "#ffffff");
+                storage.multiplayer[data.id] = playerController.createPlayer(storage.game, data.position, "#ffffff");
             }
             data.sprite = storage.multiplayer[data.id].sprite;
             storage.multiplayer[data.id] = data;
@@ -61,44 +62,12 @@ export function connect(game) {
     });
 }
 
-export function update_multiplayers(pos) {
+export function update_multiplayers(game) {
     for (const id in storage.multiplayer) {
         if (storage.multiplayer.hasOwnProperty(id)) {
-            const player = storage.multiplayer[id].sprite;
-            const controls = storage.multiplayer[id].controls;
-            const position = pos || {x: player.x, y: player.y};
-            if (position) player.setPosition(position.x, position.y);
-            player.setVelocity(0, 0);
-            let walking = false;
-            if (controls && player) {
-                if (controls.up) {
-                    player.setVelocityY(-100);
-                    walking = true;
-                } else if (controls.down) {
-                    player.setVelocityY(100);
-                    walking = true;
-                } else {
-                    player.setVelocityY(0);
-                }
-                if (controls.left) {
-                    player.setVelocityX(-100);
-                    walking = true;
-                } else if (controls.right) {
-                    player.setVelocityX(100);
-                    walking = true;
-                } else {
-                    player.setVelocityX(0);
-                }
-                if (walking) {
-                    player.anims.play('hop', true);
-                    player.walking = true;
-                }
-                else if (player.walking === true) {
-                    player.anims.play('idle', true);
-                    player.walking = false;
-                }
-                if (player.position) player.depth = player.position.y;
-            }
+            const player = storage.multiplayer[id];
+            playerController.updatePlayerMovement(game,player,player.controls,player.position);
+            console.log(storage.multiplayer[id]);
         }
     }
 }
