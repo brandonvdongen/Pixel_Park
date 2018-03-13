@@ -1,7 +1,5 @@
 import {getKeyBind} from "../utility/keyBind.js";
 import {storage} from "../data/storage.js";
-import * as multiplayerController from "../modules/multiplayerController.js";
-import {smoothMoveCameraTowards} from "../utility/cameraSmooth.js";
 
 let started = false;
 
@@ -32,7 +30,6 @@ export function preload(game) {
             repeat: 0,
             onComplete: function (player) {
                 console.log("player spawned");
-                console.log(storage);
                 player.anims.play('idle');
             }
         });
@@ -45,32 +42,43 @@ export function preload(game) {
                 player.destroy();
             }
         });
-        let controls = storage.controls;
-        if (!started) {
-            document.addEventListener("keydown", (ev) => {
-                const button = getKeyBind(ev.code);
-                if (!controls[button] && button !== undefined) {
-                    controls[button] = 1;
-                    multiplayerController.update();
-                }
-            });
-
-            document.addEventListener("keyup", (ev) => {
-                const button = getKeyBind(ev.code);
-                if (controls[button]) {
-                    controls[button] = 0;
-                    multiplayerController.update();
-                }
-            });
-            started = true;
-        }
     });
 }
 
 
-export function move_player(player, controls, position) {
+export function createPlayer(game, position, color) {
+    if (position === undefined) position = game.map.spawn;
+    const player = new PlayerController(game, position, color);
+    console.log(player);
+    game.map.layers.forEach((layer) => {
+        game.physics.add.collider(player.sprite, layer.tilemapLayer);
+    });
+    player.sprite.anims.play("spawn", true);
+
+    if (!started) {
+        const controls = player.controls;
+        document.addEventListener("keydown", (ev) => {
+            const button = getKeyBind(ev.code);
+            if (!controls[button] && button !== undefined) {
+                controls[button] = 1;
+            }
+        });
+
+        document.addEventListener("keyup", (ev) => {
+            const button = getKeyBind(ev.code);
+            if (controls[button]) {
+                controls[button] = 0;
+            }
+        });
+        started = true;
+    }
+
+    return player;
+}
+
+export function updatePlayerMovement(game, controls, position) {
     let walking = false;
-    // if (position) player.setPosition(position.x, position.y);
+    const player = game.player.sprite;
     if (controls && player) {
         if (controls.up) {
             player.setVelocityY(-100);
@@ -100,7 +108,7 @@ export function move_player(player, controls, position) {
             if (position) player.setPosition(position.x, position.y);
         }
         if (!walking && position) {
-            const map = storage.activeScene;
+            const map = game.map;
             const layer = map.getLayer("Ground");
             const tileXY = map.worldToTileXY(position.x, position.y);
             const worldXY = map.tileToWorldXY(tileXY.x, tileXY.y);
@@ -140,18 +148,7 @@ export function move_player(player, controls, position) {
 
         }
         if (player.position) player.depth = player.position.y;
-        storage.player.controls = controls;
-        storage.player.position = player.position;
     }
-}
-
-export function createPlayer(game, map, color) {
-    const player = new PlayerController(game, map, color);
-    let controls = storage.controls;
-    move_player(player.sprite, controls, player.sprite.position);
-    smoothMoveCameraTowards(storage.cameraTarget, 0);
-    player.sprite.anims.play("spawn", true);
-    return player;
 }
 
 export function interact(tile) {
@@ -159,26 +156,22 @@ export function interact(tile) {
 }
 
 class PlayerController {
-    constructor(game, map = {spawn: {x: 100, y: 100}}, color = "#ffffff") {
+    constructor(game, position, color = "#ffffff") {
         this.id = storage.player.id;
         this.color = color;
         this.sprite = game.physics.add.sprite(16, 16, 'player');
         this.sprite.setSize(10, 10);
         this.sprite.setOffset(11, 14);
-        console.log(map);
-        this.sprite.setPosition(map.spawn.x, map.spawn.y);
-        // if(map.destination)this.sprite.setPosition(map.destination.x, map.destination.y);
+        this.sprite.setPosition(position.x, position.y);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
-        map.layers.forEach((layer) => {
-            game.physics.add.collider(this.sprite, layer.tilemapLayer);
-        });
-        this.position = map.spawn;
+        this.position = position;
         this.controls = {
             up: 0,
             down: 0,
             left: 0,
-            right: 0
+            right: 0,
+            interact: 0
         }
     }
 }

@@ -22,7 +22,8 @@ export function drawDebug(game, map) {
 let cursor = false;
 let marker;
 
-export function propertyCursor(game, map) {
+export function propertyCursor(game) {
+    const map = game.map;
     if (!cursor) {
         marker = game.add.graphics();
         marker.lineStyle(3, 0xffffff, 1);
@@ -38,7 +39,6 @@ export function propertyCursor(game, map) {
     // Snap to tile coordinates, but in world space
     marker.x = map.tileToWorldX(pointerTileX);
     marker.y = map.tileToWorldY(pointerTileY);
-
     if (game.input.manager.activePointer.isDown && !mouseDown) {
         mouseDown = true;
         map.layers.forEach((layer) => {

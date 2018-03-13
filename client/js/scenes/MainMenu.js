@@ -20,8 +20,8 @@ export class MainMenu extends Phaser.Scene {
         //     }
         // }
 
-        // this.load.audio("song_nontindeVendorTheme", bgmSongList.song_nontindeVendorTheme.src);
-        // this.load.image('menu_main', 'assets/textures/hud/mainmenu.png');
+        this.load.audio("song_nontindeVendorTheme", bgmSongList.song_nontindeVendorTheme.src);
+        this.load.image('menu_main', 'assets/textures/hud/mainmenu.png');
 
         //player
         playerController.preload(this);
@@ -37,15 +37,16 @@ export class MainMenu extends Phaser.Scene {
         this.sound.pauseOnBlur = false;
         // playBGM(this, "song_nontindeVendorTheme");
 
-        this.input.once('pointerdown', function (event) {
+        // this.input.once('pointerdown', function (event) {
+        console.log("starting")
             this.scene.start('PixilTown');
-        }, this);
+        // }, this);
 
-        connect(this).then((data) => {
-            storage.player.id = data.id;
-            this.scene.start(data.map);
-            // this.scene.start('Voxalia');
-        });
+        // connect(this).then((data) => {
+        //     storage.player.id = data.id;
+        //     this.scene.start(data.map);
+        //     // this.scene.start('Voxalia');
+        // });
 
     }
 
