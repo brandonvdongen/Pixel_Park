@@ -77,7 +77,7 @@ export function createPlayer(game, position, color) {
 export function updatePlayerMovement(game, controls, position) {
     let walking = false;
     const player = game.player.sprite;
-    if (controls && player) {
+    if (controls && player && player.moveBlock.length <= 0) {
         if (controls.up) {
             player.setVelocityY(-100);
             walking = true;
@@ -124,30 +124,6 @@ export function updatePlayerMovement(game, controls, position) {
                     }
                 }
             });
-            // if (player.you) {
-            //     if (!player.lastTile) player.lastTile = {x: -1, y: -1};
-            //     if (player.lastTile.x !== tileXY.x || player.lastTile.y !== tileXY.y) {
-            //         player.lastTile.x = tileXY.x;
-            //         player.lastTile.y = tileXY.y;
-            //         map.layers.forEach((layer) => {
-            //             map.setLayer(layer.name);
-            //             const tile = map.getTileAt(tileXY.x, tileXY.y);
-            //             if (tile) {
-            //                 if (tile.properties) {
-            //                     console.log(player.interacting);
-            //                     if (controls.interact && !player.interacting) {
-            //                         player.interact = true;
-            //                         interact(tile);
-            //
-            //                     } else if (!controls.interact && player.interacting) {
-            //                         player.interacting = false;
-            //                     }
-            //                 }
-            //             }
-            //         });
-            //     }
-            // }
-
         }
         if (player.position) player.depth = player.position.y;
     }
@@ -167,6 +143,7 @@ class PlayerController {
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
         this.position = position;
+        this.moveBlock = [];
         this.controls = {
             up: 0,
             down: 0,
