@@ -3,7 +3,6 @@ import {bgmSongList} from "../data/songs.js";
 import * as playerController from "../modules/playerController.js";
 import * as mapHandler from "../modules/mapHandler.js";
 import * as cameraController from "../modules/cameraController.js";
-import {updatePlayerMovement} from "../modules/playerController.js";
 
 let map;
 let player;

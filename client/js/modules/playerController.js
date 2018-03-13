@@ -1,5 +1,4 @@
 import {getKeyBind} from "../utility/keyBind.js";
-import {storage} from "../data/storage.js";
 
 let started = false;
 
@@ -49,7 +48,6 @@ export function preload(game) {
 export function createPlayer(game, position, color) {
     if (position === undefined) position = game.map.spawn;
     const player = new PlayerController(game, position, color);
-    console.log(player);
     game.map.layers.forEach((layer) => {
         game.physics.add.collider(player.sprite, layer.tilemapLayer);
     });
@@ -157,7 +155,6 @@ export function interact(tile) {
 
 class PlayerController {
     constructor(game, position, color = "#ffffff") {
-        this.id = storage.player.id;
         this.color = color;
         this.sprite = game.physics.add.sprite(16, 16, 'player');
         this.sprite.setSize(10, 10);

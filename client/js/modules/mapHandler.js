@@ -1,4 +1,3 @@
-import {storage} from "../data/storage.js";
 import * as debug from "../utility/debugger.js";
 
 const layers = {};
@@ -60,7 +59,7 @@ export function createMap(game, files) {
                 files.transport.forEach(teleporter => {
                     if (teleporter.position.x === tile.x && teleporter.position.y === tile.y) {
                         found = true;
-                        console.log("found: ", teleporter.name);
+                        console.log("found transporter:", teleporter.name);
                         tile.properties.map = teleporter.target.map;
                         tile.properties.destination = teleporter.target.destination;
                         if (!map.teleporters) map.teleporters = {};

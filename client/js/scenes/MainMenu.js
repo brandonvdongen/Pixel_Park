@@ -1,8 +1,6 @@
 import * as preloader from "../utility/preloader.js";
 import {storage} from "../data/storage.js";
-import {playBGM} from "../functions/functions.js";
 import {bgmSongList} from "../data/songs.js";
-import {connect} from "../modules/multiplayerController.js";
 import * as playerController from "../modules/playerController.js";
 
 export class MainMenu extends Phaser.Scene {
