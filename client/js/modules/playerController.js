@@ -113,16 +113,14 @@ export function updatePlayerMovement(game, controls, position) {
             const smoothFactor = 0.1;
             map.layers.forEach((layer) => {
                 map.setLayer(layer.name);
-                const tile = map.getTileAt(tileXY.x,tileXY.y);
+                const tile = map.getTileAt(tileXY.x, tileXY.y);
                 if (tile) {
                     if (tile.properties.align === true) {
                         const target = {
                             x: ((position.x - worldXY.x - (layer.baseTileWidth / 2)) * smoothFactor),
                             y: ((position.y - worldXY.y - (layer.baseTileHeight / 2)) * smoothFactor)
                         };
-                        if ((Math.abs(target.x) > 0.001 || Math.abs(target.y) > 0.001)) {
-                            player.setPosition(position.x - target.x, position.y - target.y);
-                        }
+                        player.setPosition(position.x - target.x, position.y - target.y);
                     }
                 }
             });

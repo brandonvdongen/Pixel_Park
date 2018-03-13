@@ -33,8 +33,8 @@ const game = new Phaser.Game(config);
 
 window.onresize = function () {
     game.resize(window.innerWidth, window.innerHeight, 1.0);
-    if (storage.mainCamera) {
-        storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    if (game.cameras.main) {
+        game.cameras.main.setViewport(0, 0, window.innerWidth, window.innerHeight);
     }
 };
 
