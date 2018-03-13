@@ -1,5 +1,6 @@
 import {getKeyBind} from "../utility/keyBind.js";
 import {storage} from "../data/storage.js";
+import * as multiplayerController from "../modules/multiplayerController.js";
 
 let started = false;
 
@@ -12,8 +13,11 @@ export function init() {
             if (!controls[button] && button !== undefined) {
                 controls[button] = 1;
                 if (button === "interact") {
+                    const game = storage.game;
+                    console.log(game);
                     interact(getTileUnderPlayer(game));
                 }
+                multiplayerController.update(storage.game);
             }
         });
 
@@ -21,6 +25,7 @@ export function init() {
             const button = getKeyBind(ev.code);
             if (controls[button]) {
                 controls[button] = 0;
+                multiplayerController.update(storage.game);
             }
         });
         started = true;
@@ -87,9 +92,9 @@ export function updatePlayerMovement(game, player, controls, target) {
     let walking = false;
     player = player.sprite;
     // const player = game.player.sprite;
+    console.log(player);
     const speed = player.speed;
     const position = player.position;
-    console.log(controls);
     if (controls && player && player.moveBlock.length <= 0) {
         if (controls.up) {
             player.setVelocityY(-speed);
@@ -143,6 +148,7 @@ export function updatePlayerMovement(game, player, controls, target) {
             });
         }
         if (player.position) player.depth = player.position.y;
+        player.position = {x: player.x, y: player.y}
     }
 }
 

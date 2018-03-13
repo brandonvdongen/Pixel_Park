@@ -51,12 +51,11 @@ export function connect(menu) {
 
         socket.on("update", (data) => {
             if (!storage.multiplayer[data.id]) {
-                map.spawn = data.position;
                 storage.multiplayer[data.id] = playerController.createPlayer(storage.game, data.position, "#ffffff");
             }
             data.sprite = storage.multiplayer[data.id].sprite;
             storage.multiplayer[data.id] = data;
-            playerController.move_player(data.sprite, data.controls, data.position);
+            playerController.updatePlayerMovement(storage.game,storage.player,storage.player.controls,data.position);
         });
 
     });
@@ -66,16 +65,17 @@ export function update_multiplayers(game) {
     for (const id in storage.multiplayer) {
         if (storage.multiplayer.hasOwnProperty(id)) {
             const player = storage.multiplayer[id];
-            playerController.updatePlayerMovement(game,player,player.controls,player.position);
+            playerController.updatePlayerMovement(game, player, player.controls, player.position);
             console.log(storage.multiplayer[id]);
         }
     }
 }
 
-export function update() {
+export function update(game) {
     if (socket) {
         const playerdata = JSON.parse(JSON.stringify(storage.player));
         delete playerdata.sprite;
+        delete playerdata.you;
         socket.emit("update", playerdata);
     }
 }

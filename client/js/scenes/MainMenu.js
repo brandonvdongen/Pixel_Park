@@ -11,7 +11,7 @@ export class MainMenu extends Phaser.Scene {
     }
 
     preload() {
-        playerController.init()
+        playerController.init();
         preloader.start(this);
         this.load.audio("song_nontindeVendorTheme", bgmSongList.song_nontindeVendorTheme.src);
         this.load.image('menu_main', 'assets/textures/hud/mainmenu.png');

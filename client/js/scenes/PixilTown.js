@@ -5,7 +5,6 @@ import * as mapHandler from "../modules/mapHandler.js";
 import * as cameraController from "../modules/cameraController.js";
 import {storage} from "../data/storage.js";
 
-let map;
 let player;
 const mapName = "PixilTown";
 const files = {
@@ -53,16 +52,11 @@ export class PixilTown extends Phaser.Scene {
     }
 
     create() {
-        this.map = mapHandler.createMap(this, files);
-        this.player = playerController.createPlayer(this, undefined, "#ffffff");
-        this.player.you = true;
-        cameraController.setCameraToWorldXY(this, this.player.sprite);
+        mapHandler.createMap(this, files);
     }
 
     update(time, delta) {
-        cameraController.smoothCamera(this, .9);
         mapHandler.updateMap(this);
-        playerController.updatePlayerMovement(this, this.player, storage.controls, this.player.sprite);
     }
 
 }
