@@ -107,7 +107,6 @@ export function updatePlayerMovement(game, controls, position) {
         }
         if (!walking && position) {
             const map = game.map;
-            const layer = map.getLayer("Ground");
             const tileXY = map.worldToTileXY(position.x, position.y);
             const worldXY = map.tileToWorldXY(tileXY.x, tileXY.y);
             const smoothFactor = 0.1;
