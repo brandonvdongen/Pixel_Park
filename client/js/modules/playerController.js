@@ -158,7 +158,7 @@ class PlayerController {
         this.color = color;
         this.sprite = game.physics.add.sprite(16, 16, 'player');
         this.sprite.setSize(10, 10);
-        this.sprite.setOffset(11, 14);
+        this.sprite.setOffset(11, 11);
         this.sprite.setPosition(position.x, position.y);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
