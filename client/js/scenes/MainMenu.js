@@ -26,7 +26,7 @@ export class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        storage.activeScene=this;
+        storage.activeScene = this;
 
         // this.menu = this.add.image(400, 300, 'menu_main');
         // Phaser.Display.Align.In.Center(this.menu, this.add.zone(window.innerWidth / 2, window.innerHeight / 2, storage.settings.resolution.width, storage.settings.resolution.height));
@@ -37,7 +37,7 @@ export class MainMenu extends Phaser.Scene {
 
         // this.input.once('pointerdown', function (event) {
         console.log("starting")
-            this.scene.start('PixilTown');
+        this.scene.start('PixilTown');
         // }, this);
 
         // connect(this).then((data) => {

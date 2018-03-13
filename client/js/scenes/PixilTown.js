@@ -61,7 +61,7 @@ export class PixilTown extends Phaser.Scene {
     update(time, delta) {
         cameraController.smoothCamera(this, .9);
         mapHandler.updateMap(this);
-        playerController.updatePlayerMovement(this,this.player.controls,this.player.sprite);
+        playerController.updatePlayerMovement(this, this.player.controls, this.player.sprite);
     }
 
 }

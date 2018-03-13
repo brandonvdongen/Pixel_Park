@@ -11,8 +11,8 @@ export function smoothCamera(game, smoothFactor) {
     }
 }
 
-export function setCameraToWorldXY(game,target){
+export function setCameraToWorldXY(game, target) {
     const camera = game.cameras.main;
-    camera.scrollX =  camera.scrollX + (target.x - camera.width * 0.5);
-    camera.scrollY =  camera.scrollY + (target.y - camera.height * 0.5);
+    camera.scrollX = camera.scrollX + (target.x - camera.width * 0.5);
+    camera.scrollY = camera.scrollY + (target.y - camera.height * 0.5);
 }

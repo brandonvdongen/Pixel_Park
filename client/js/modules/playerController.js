@@ -30,6 +30,8 @@ export function preload(game) {
             onComplete: function (player) {
                 console.log("player spawned");
                 player.anims.play('idle');
+                const index = player.moveBlock.indexOf("animation_spawn");
+                if (index > -1) player.moveBlock.splice(index, 1);
             }
         });
         game.anims.create({
@@ -51,6 +53,7 @@ export function createPlayer(game, position, color) {
     game.map.layers.forEach((layer) => {
         game.physics.add.collider(player.sprite, layer.tilemapLayer);
     });
+    player.sprite.moveBlock.push("animation_spawn");
     player.sprite.anims.play("spawn", true);
 
     if (!started) {
@@ -141,8 +144,8 @@ class PlayerController {
         this.sprite.setPosition(position.x, position.y);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.setBounce(0);
+        this.sprite.moveBlock = [];
         this.position = position;
-        this.moveBlock = [];
         this.controls = {
             up: 0,
             down: 0,
