@@ -111,15 +111,21 @@ export function updatePlayerMovement(game, controls, position) {
             const tileXY = map.worldToTileXY(position.x, position.y);
             const worldXY = map.tileToWorldXY(tileXY.x, tileXY.y);
             const smoothFactor = 0.1;
-            if (!player.you) {
-                const target = {
-                    x: ((position.x - worldXY.x - (layer.baseTileWidth / 2)) * smoothFactor),
-                    y: ((position.y - worldXY.y - (layer.baseTileHeight / 2)) * smoothFactor)
-                };
-                if ((Math.abs(target.x) > 0.001 || Math.abs(target.y) > 0.001)) {
-                    player.setPosition(position.x - target.x, position.y - target.y);
+            map.layers.forEach((layer) => {
+                map.setLayer(layer.name);
+                const tile = map.getTileAt(tileXY.x,tileXY.y);
+                if (tile) {
+                    if (tile.properties.align === true) {
+                        const target = {
+                            x: ((position.x - worldXY.x - (layer.baseTileWidth / 2)) * smoothFactor),
+                            y: ((position.y - worldXY.y - (layer.baseTileHeight / 2)) * smoothFactor)
+                        };
+                        if ((Math.abs(target.x) > 0.001 || Math.abs(target.y) > 0.001)) {
+                            player.setPosition(position.x - target.x, position.y - target.y);
+                        }
+                    }
                 }
-            }
+            });
             // if (player.you) {
             //     if (!player.lastTile) player.lastTile = {x: -1, y: -1};
             //     if (player.lastTile.x !== tileXY.x || player.lastTile.y !== tileXY.y) {

@@ -58,7 +58,12 @@
                 },
              "12":
                 {
+                 "align":true,
                  "spawn":true
+                },
+             "13":
+                {
+                 "align":true
                 },
              "14":
                 {
@@ -254,7 +259,24 @@
                 },
              "72":
                 {
+                 "align":true,
                  "teleporter":true
+                },
+             "73":
+                {
+                 "align":true
+                },
+             "74":
+                {
+                 "align":true
+                },
+             "75":
+                {
+                 "align":true
+                },
+             "76":
+                {
+                 "align":true
                 },
              "8":
                 {
@@ -277,7 +299,12 @@
                 },
              "12":
                 {
+                 "align":"bool",
                  "spawn":"bool"
+                },
+             "13":
+                {
+                 "align":"bool"
                 },
              "14":
                 {
@@ -473,7 +500,24 @@
                 },
              "72":
                 {
+                 "align":"bool",
                  "teleporter":"bool"
+                },
+             "73":
+                {
+                 "align":"bool"
+                },
+             "74":
+                {
+                 "align":"bool"
+                },
+             "75":
+                {
+                 "align":"bool"
+                },
+             "76":
+                {
+                 "align":"bool"
                 },
              "8":
                 {
