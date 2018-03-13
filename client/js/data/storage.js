@@ -13,8 +13,8 @@ export let storage =
             down: 0,
             left: 0,
             right: 0,
-            interact:0
+            interact: 0
         },
         multiplayer: {},
-        player:{}
+        player: {}
     };

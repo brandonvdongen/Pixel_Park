@@ -30,13 +30,9 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+storage.version = version;
+storage.game_name = game_name;
 
 window.onresize = function () {
     game.resize(window.innerWidth, window.innerHeight, 1.0);
-    if (storage.mainCamera) {
-        storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
-    }
 };
-
-storage.version = version;
-storage.game_name = game_name;

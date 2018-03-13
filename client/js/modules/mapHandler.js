@@ -1,11 +1,7 @@
-import {storage} from "../data/storage.js";
 import * as debug from "../utility/debugger.js";
+import * as cameraController from "./cameraController.js";
 import * as playerController from "./playerController.js";
-import {smoothMoveCameraTowards} from "../utility/cameraSmooth.js";
-
-let map;
-const tilesets = {};
-const layers = {};
+import {storage} from "../data/storage.js";
 
 function process(game, files, type) {
     if (type === "load_map") {
@@ -31,68 +27,70 @@ export function preloadMap(game, files) {
 }
 
 export function createMap(game, files) {
-    storage.activeScene = game;
     console.log("installing plugins");
     game.sys.install('AnimatedTiles');
 
-
     console.log("setting up camera");
-    storage.mainCamera = game.cameras.main;
-    storage.mainCamera.setViewport(0, 0, window.innerWidth, window.innerHeight);
-    storage.mainCamera.setZoom(3);
+    const camera = game.cameras.main;
+    camera.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    camera.setZoom(3);
 
     console.log("creating map");
-    map = game.make.tilemap({key: files.map.name});
+    const map = game.make.tilemap({key: files.map.name});
+    game.map = map;
     files.map.layers.forEach((layer, index) => {
         const tileset = map.addTilesetImage(layer.key);
-        layers[layer.name] = map.createDynamicLayer(layer.name, tileset, 0, 0);
-        layers[layer.name].setCollisionByProperty({collides: true});
-        if (index === 0) layers[layer.name].depth = 0;
-        else layers[layer.name].depth = 1000;
+        let dynamicLayer = map.createDynamicLayer(layer.name, tileset, 0, 0);
+        dynamicLayer.setCollisionByProperty({collides: true});
+        if (index === 0) dynamicLayer.depth = 0;
+        else dynamicLayer.depth = 1000;
 
     });
-    const layer = layers["Ground"];
+    const layer = map.getLayer("Ground");
     console.log("getting tile data");
-    map.getTilesWithin(0, 0, layer.width, layer.height, {}, layer).forEach((tile, index) => {
+    map.getTilesWithin(0, 0, layer.width, layer.height, {}, layer.tilemapLayer).forEach((tile, index) => {
         if (tile.properties) {
-            if (tile.properties.spawn) {
+            if (tile.properties["spawn"]) {
                 console.log("found spawn");
-                map.spawn = map.tileToWorldXY(tile.x + 1, tile.y + 1, {}, storage.mainCamera, layer);
+                map.spawn = map.tileToWorldXY(tile.x + 1, tile.y + 1, {}, camera, layer.tilemapLayer);
                 map.spawn.x -= map.tileWidth / 2;
                 map.spawn.y -= map.tileHeight / 2;
             }
-            if (tile.properties.teleporter === true) {
+            if (tile.properties["teleporter"] === true) {
                 let found = false;
                 files.transport.forEach(teleporter => {
                     if (teleporter.position.x === tile.x && teleporter.position.y === tile.y) {
                         found = true;
-                        console.log("found: ", teleporter.name);
+                        console.log("found transporter:", teleporter.name);
                         tile.properties.map = teleporter.target.map;
                         tile.properties.destination = teleporter.target.destination;
+                        if (!map.teleporters) map.teleporters = {};
+                        map.teleporters[teleporter.name] = teleporter;
                     }
                     if (!found) {
                         console.warn("transport ", teleporter, "configured, but no teleporter tile found at specified position");
                     }
-                })
-
-                // map.teleporters.push(value);
+                });
             }
         }
     });
 
-
-
-    storage.activeScene = map;
-    console.log("map loaded");
     game.sys.animatedTiles.init(map);
-    return map;
+    console.log("map loaded");
+    game.map = map;
+    storage.game = game;
+    game.player = playerController.createPlayer(game, undefined, "#ffffff");
+    game.player.you = true;
+    cameraController.setCameraToWorldXY(game, game.player.sprite);
 }
 
 export function updateMap(game) {
-    debug.propertyCursor(game, map);
-    smoothMoveCameraTowards(storage.cameraTarget, 0.9);
-    const player = storage.player.sprite;
-    let controls = storage.controls;
-    player.position = {x: player.x, y: player.y};
-    playerController.move_player(player, controls, player.position);
+    debug.propertyCursor(game);
+    cameraController.smoothCamera(game, .9);
+    playerController.updatePlayerMovement(game, game.player, storage.controls, game.player.sprite);
+    // smoothMoveCameraTowards(storage.cameraTarget, 0.9);
+    // const player = storage.player.sprite;
+    // let controls = storage.controls;
+    // player.position = {x: player.x, y: player.y};
+    // playerController.move_player(player, controls, player.position);
 }

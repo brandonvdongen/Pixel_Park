@@ -1,11 +1,11 @@
 import * as preloader from "../utility/preloader.js";
 import {bgmSongList} from "../data/songs.js";
-import {storage} from "../data/storage.js";
 import * as playerController from "../modules/playerController.js";
-import * as multiplayerController from "../modules/multiplayerController.js";
 import * as mapHandler from "../modules/mapHandler.js";
+import * as cameraController from "../modules/cameraController.js";
+import {storage} from "../data/storage.js";
 
-let map;
+let player;
 const mapName = "PixilTown";
 const files = {
     map: {
@@ -52,15 +52,11 @@ export class PixilTown extends Phaser.Scene {
     }
 
     create() {
-        map = mapHandler.createMap(this, files);
-        storage.player = playerController.createPlayer(this, map, "#ffffff");
-        storage.player.sprite.you = true;
-        storage.cameraTarget = storage.player.sprite;
+        mapHandler.createMap(this, files);
     }
 
     update(time, delta) {
         mapHandler.updateMap(this);
-        multiplayerController.update_multiplayers();
     }
 
 }

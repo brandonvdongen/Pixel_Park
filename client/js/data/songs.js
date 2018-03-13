@@ -15,18 +15,18 @@ export let bgmSongList = {
         src: "assets/music/Electrodoodle.ogg"
     },
     song_chiphInstrumental: {
-        name:"Chipho Instrumental",
-        author:"RoccoW",
-        src:"assets/music/RoccoW_-_Chipho_instrumental.ogg"
+        name: "Chipho Instrumental",
+        author: "RoccoW",
+        src: "assets/music/RoccoW_-_Chipho_instrumental.ogg"
     },
     song_nontindeVendorTheme: {
-        name:"Nontinde Vendor Theme",
-        author:"RoccoW",
-        src:"assets/music/RoccoW_-_Nontinde_Vendor_Theme.ogg"
+        name: "Nontinde Vendor Theme",
+        author: "RoccoW",
+        src: "assets/music/RoccoW_-_Nontinde_Vendor_Theme.ogg"
     },
-    song_XinyueTheme:{
-        name:"Xinyue Theme 1",
-        author:"The J Arhur Keenes Band",
-        src:"assets/music/The_J_Arthur_Keenes_Band_-_01_-_Xinyue_Theme_1.ogg"
+    song_XinyueTheme: {
+        name: "Xinyue Theme 1",
+        author: "The J Arhur Keenes Band",
+        src: "assets/music/The_J_Arthur_Keenes_Band_-_01_-_Xinyue_Theme_1.ogg"
     }
 };
