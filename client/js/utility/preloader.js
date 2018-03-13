@@ -1,7 +1,7 @@
 let preloader;
 let text;
 let progress;
-let filesLoaded = 0;
+let filesLoaded;
 
 function createPreloader() {
     preloader = document.createElement("div");

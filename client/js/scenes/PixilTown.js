@@ -1,15 +1,10 @@
+import * as mapController from "../modules/mapController.js";
 import * as preloader from "../utility/preloader.js";
 import {bgmSongList} from "../data/songs.js";
-import * as playerController from "../modules/playerController.js";
-import * as mapHandler from "../modules/mapHandler.js";
-import * as cameraController from "../modules/cameraController.js";
-import {storage} from "../data/storage.js";
 
-let player;
-const mapName = "PixilTown";
-const files = {
+const config = {
     map: {
-        name: mapName,
+        name: "PixilTown",
         src: "assets/tilemap/PixilTown.json",
         layers: [
             {name: "Ground", key: "Tiles_PixilTown"},
@@ -26,9 +21,10 @@ const files = {
     transport: [
         {
             name: "Voxalia",
+            layer: 'Ground',
             position: {
-                x: 21,
-                y: 7
+                x: 13,
+                y: 15
             },
             target: {
                 map: "Voxalia",
@@ -41,22 +37,21 @@ const files = {
 };
 
 export class PixilTown extends Phaser.Scene {
-
     constructor() {
-        super({key: mapName});
+        super({key: config.map.name});
     }
 
     preload() {
         preloader.start(this);
-        mapHandler.preloadMap(this, files);
+        mapController.preload(this, config);
     }
 
     create() {
-        mapHandler.createMap(this, files);
+        mapController.create(this, config);
     }
 
     update(time, delta) {
-        mapHandler.updateMap(this);
+        mapController.update(this, config);
     }
 
 }

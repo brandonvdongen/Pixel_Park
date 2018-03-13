@@ -3,8 +3,6 @@ const game_name = "pixel_park";
 
 import {MainMenu} from "../js/scenes/MainMenu.js"
 import {PixilTown} from "./scenes/PixilTown.js";
-import {Voxalia} from "./scenes/Voxalia.js";
-import {storage} from "./data/storage.js";
 
 //data
 function saveResolution() {
@@ -25,14 +23,13 @@ const config = {
             debug: false
         }
     },
-    scene: [MainMenu, PixilTown, Voxalia],
+    scene: [MainMenu, PixilTown],
     pixelArt: true
 };
 
 const game = new Phaser.Game(config);
-storage.version = version;
-storage.game_name = game_name;
 
-window.onresize = function () {
+window.addEventListener("resize", function() {
+    console.log("resize detected");
     game.resize(window.innerWidth, window.innerHeight, 1.0);
-};
+});
