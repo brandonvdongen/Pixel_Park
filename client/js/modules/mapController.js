@@ -93,7 +93,6 @@ export function create(game, config) {
     cameraController.setCameraPosition(game, player);
     if (debug) console.log("***END CREATE PLAYER***");
     player.anims.play("spawn");
-
 }
 
 export function update(game, config) {

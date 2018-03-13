@@ -1,4 +1,4 @@
-export let playerID;
+export let characterID = "player";
 export const characters = {};
 
 export function preload(game) {
@@ -38,13 +38,15 @@ export function preload(game) {
             frameRate: 12,
             repeat: 0,
             onComplete: function (player) {
+                delete characters[player.id];
                 player.destroy();
+                console.log(characters);
             }
         });
     });
 }
 
-export function create(game, position) {
+export function create(game, position, id) {
     let sprite;
     sprite = game.physics.add.sprite(16, 16, 'player');
     sprite.setSize(10, 10);
@@ -56,7 +58,8 @@ export function create(game, position) {
     sprite.defaultSpeed = 100;
     sprite.speed = 100;
     sprite.position = position;
-    console.log(sprite);
+    sprite.id = id;
+    characters[id] = sprite;
     return sprite;
 }
 
