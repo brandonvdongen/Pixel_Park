@@ -1,5 +1,9 @@
-export let characterID = "player";
+export let playerID;
 export const characters = {};
+
+export function setPlayerID(id) {
+    playerID = id;
+}
 
 export function preload(game) {
     game.load.image('player', "assets/sprites/player/player.png");
@@ -64,5 +68,13 @@ export function create(game, position, id) {
 }
 
 export function update(game, config) {
+    for (const id in characters) {
+        if (characters.hasOwnProperty(id)) {
+
+            if (id !== playerID) {
+                console.log(characters[id]);
+            }
+        }
+    }
 
 }

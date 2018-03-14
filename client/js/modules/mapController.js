@@ -85,7 +85,8 @@ export function create(game, config) {
 
     if (debug) console.log("***START CREATE PLAYER***");
     if (debug) console.log("Creating character");
-    const player = playerController.create(game, game.map.spawn);
+    const player = playerController.create(game, game.map.spawn, "player");
+    playerController.setPlayerID("player");
     game.sys.animatedTiles.init(game.map);
     if (debug) console.log("Setting up camera");
     game.cameras.main.setZoom(3);
@@ -97,4 +98,5 @@ export function create(game, config) {
 
 export function update(game, config) {
     cameraController.update(game);
+    playerController.update(game);
 }

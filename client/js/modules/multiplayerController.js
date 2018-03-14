@@ -1,5 +1,5 @@
-let scene;
+let game;
 
-export function setScene(game) {
-    scene = game;
+export function setScene(scene) {
+    game = scene;
 }
