@@ -54,7 +54,7 @@ export function create(game, config) {
     config.map.layers.forEach((layer, index) => {
         const tileset = map.addTilesetImage(layer.key);
         const dynamicLayer = map.createDynamicLayer(layer.name, tileset, 0, 0);
-        dynamicLayer.setCollisionByProperty({collides: true});
+        dynamicLayer.setCollisionByProperty({collide: true});
         dynamicLayer.depth = index * 1000;
     });
 
@@ -85,7 +85,10 @@ export function create(game, config) {
 
     if (debug) console.log("***START CREATE PLAYER***");
     if (debug) console.log("Creating character");
+    game.physics.world.setBounds(0, 0, game.map.wid, 600 * 8);
+    game.map.setLayer(0);
     const player = playerController.create(game, game.map.spawn, "player");
+    game.player = player;
     playerController.setPlayerID("player");
     game.sys.animatedTiles.init(game.map);
     if (debug) console.log("Setting up camera");

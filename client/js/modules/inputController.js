@@ -14,6 +14,9 @@ const keyBinds = {
     Space: "interact"
 };
 
+let scene;
+let playerID;
+
 function getKey(key) {
     if (keyBinds[key]) {
         return keyBinds[key];
@@ -22,13 +25,18 @@ function getKey(key) {
 
 let started = false;
 
-export function init() {
+export function init(id, game) {
+    if (id && game) {
+        scene = game;
+        playerID = id;
+        scene[playerID].controls = controls;
+    }
     if (!started) {
         document.addEventListener("keydown", (ev) => {
             const button = getKey(ev.code);
             if (!controls[button] && button !== undefined) {
                 controls[button] = 1;
-                console.log(controls);git
+                // console.log(scene[playerID].controls);
                 if (button === "interact") {
                     // interact(getTileUnderPlayer(game));
                 }
@@ -43,6 +51,6 @@ export function init() {
         });
         started = true;
     } else {
-        console.log("controls already initiated");
+        console.log("refreshing instance");
     }
 }

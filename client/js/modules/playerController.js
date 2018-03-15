@@ -1,8 +1,12 @@
-export let playerID;
-export const characters = {};
+import * as inputController from "./inputController.js";
+
+let playerID;
+const characters = {};
+
 
 export function setPlayerID(id) {
     playerID = id;
+    inputController.init(playerID, characters);
 }
 
 export function preload(game) {
@@ -58,21 +62,69 @@ export function create(game, position, id) {
     sprite.setPosition(position.x, position.y);
     sprite.setCollideWorldBounds(true);
     sprite.setBounce(0);
-    sprite.moveBlock = [];
+    sprite.moveBlock = ["animation_spawn"];
     sprite.defaultSpeed = 100;
     sprite.speed = 100;
     sprite.position = position;
     sprite.id = id;
     characters[id] = sprite;
+    game.physics.add.collider(sprite, game.map.getLayer('Ground').tilemapLayer);
+    console.log(game.physics);
     return sprite;
 }
 
 export function update(game, config) {
     for (const id in characters) {
         if (characters.hasOwnProperty(id)) {
-
-            if (id !== playerID) {
-                console.log(characters[id]);
+            let walking = false;
+            const player = characters[id];
+            const speed = player.speed;
+            if (player.controls && player.moveBlock.length <= 0) {
+                const controls = player.controls;
+                // console.log(controls);
+                if (controls.up) {
+                    player.setVelocityY(-speed);
+                    walking = true;
+                }
+                else if (controls.down) {
+                    player.setVelocityY(speed);
+                    walking = true;
+                }
+                else {
+                    player.setVelocityY(0);
+                }
+                if (controls.left) {
+                    player.setVelocityX(-speed);
+                    walking = true;
+                }
+                else if (controls.right) {
+                    player.setVelocityX(speed);
+                    walking = true;
+                }
+                else {
+                    player.setVelocityX(0);
+                }
+                if (walking) {
+                    console.log('walking');
+                    player.anims.play('hop', true);
+                    player.walking = true;
+                } else if (player.walking) {
+                    player.anims.play('idle', true);
+                    player.walking = false;
+                    player.position = {x: player.x, y: player.y};
+                }
+            }
+            if (player) {
+                const tileXY = game.map.worldToTileXY(player.x, player.y);
+                const tile = game.map.getTileAt(tileXY.x, tileXY.y);
+                console.log(game);
+                if (tile) {
+                    if (tile.properties.speed) {
+                        player.speed = tile.properties.speed;
+                    } else {
+                        player.speed = player.defaultSpeed;
+                    }
+                }
             }
         }
     }
