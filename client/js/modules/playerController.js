@@ -10,6 +10,7 @@ export function setPlayerID(id) {
 }
 
 export function preload(game) {
+    game.characters = characters;
     game.load.image('player', "assets/sprites/player/player.png");
     game.load.spritesheet('player_idle', "assets/sprites/player/player_idle.png", {frameWidth: 32, frameHeight: 32});
     game.load.spritesheet('player_hop', "assets/sprites/player/player_hop.png", {frameWidth: 32, frameHeight: 32});
@@ -68,8 +69,13 @@ export function create(game, position, id) {
     sprite.position = position;
     sprite.id = id;
     characters[id] = sprite;
+
     game.physics.add.collider(sprite, game.map.getLayer('Ground').tilemapLayer);
-    console.log(game.physics);
+
+    sprite.on("interact", (game, sprite) => {
+        interact(game, sprite);
+    });
+
     return sprite;
 }
 
@@ -77,11 +83,11 @@ export function update(game, config) {
     for (const id in characters) {
         if (characters.hasOwnProperty(id)) {
             let walking = false;
+            let interacting = false;
             const player = characters[id];
             const speed = player.speed;
             if (player.controls && player.moveBlock.length <= 0) {
                 const controls = player.controls;
-                // console.log(controls);
                 if (controls.up) {
                     player.setVelocityY(-speed);
                     walking = true;
@@ -104,29 +110,58 @@ export function update(game, config) {
                 else {
                     player.setVelocityX(0);
                 }
-                if (walking) {
-                    console.log('walking');
-                    player.anims.play('hop', true);
-                    player.walking = true;
-                } else if (player.walking) {
-                    player.anims.play('idle', true);
-                    player.walking = false;
-                    player.position = {x: player.x, y: player.y};
+                if (controls.interact && !player.interacting) {
+                    interacting = true;
+                    player.interacting = true;
+                } else if (!controls.interact && player.interacting) {
+                    player.interacting = false;
                 }
             }
+            if (walking) {
+                console.log('walking');
+                player.anims.play('hop', true);
+                player.walking = true;
+            } else if (player.walking) {
+                player.anims.play('idle', true);
+                player.walking = false;
+                player.position = {x: player.x, y: player.y};
+            }
             if (player) {
-                const tileXY = game.map.worldToTileXY(player.x, player.y);
-                const tile = game.map.getTileAt(tileXY.x, tileXY.y);
-                console.log(game);
-                if (tile) {
-                    if (tile.properties.speed) {
-                        player.speed = tile.properties.speed;
+                const data = getTileData(game, player);
+                const smoothFactor = 0.1;
+                if (data.tile) {
+                    if (data.tile.properties.speed) {
+                        player.speed = data.tile.properties.speed;
                     } else {
                         player.speed = player.defaultSpeed;
+                    }
+                    if (data.tile.properties.align && !walking) {
+                        const target = {
+                            x: ((player.x - data.worldXY.x - (data.layer.baseTileWidth / 2)) * smoothFactor),
+                            y: ((player.y - data.worldXY.y - (data.layer.baseTileHeight / 2)) * smoothFactor)
+                        };
+                        player.setPosition(player.x - target.x, player.y - target.y);
+                        if (interacting && player.id === playerID) {
+                            changeMap(game, player);
+                        }
                     }
                 }
             }
         }
     }
+}
 
+export function getTileData(game, player) {
+    const data = {};
+    data.tileXY = game.map.worldToTileXY(player.x, player.y);
+    data.worldXY = game.map.tileToWorldXY(data.tileXY.x, data.tileXY.y);
+    data.tile = game.map.getTileAt(data.tileXY.x, data.tileXY.y);
+    data.layer = game.map.getLayer();
+
+    return data;
+}
+
+function changeMap(game, player) {
+    player.anims.play("delete", true);
+    console.log(game, player);
 }

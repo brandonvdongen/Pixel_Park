@@ -82,6 +82,9 @@ export function create(game, config) {
         }
     }
     if (debug) console.log("***END CREATING MAP***");
+    const music = game.sound.add(Object.keys(config.audio)[0]);
+    music.volume = 0.1;
+    // music.play();
 
     if (debug) console.log("***START CREATE PLAYER***");
     if (debug) console.log("Creating character");

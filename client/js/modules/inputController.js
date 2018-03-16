@@ -25,11 +25,10 @@ function getKey(key) {
 
 let started = false;
 
-export function init(id, game) {
-    if (id && game) {
-        scene = game;
+export function init(id, characters) {
+    if (id && characters) {
         playerID = id;
-        scene[playerID].controls = controls;
+        characters[playerID].controls = controls;
     }
     if (!started) {
         document.addEventListener("keydown", (ev) => {
