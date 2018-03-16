@@ -141,7 +141,7 @@ export function update(game, config) {
                             y: ((player.y - data.worldXY.y - (data.layer.baseTileHeight / 2)) * smoothFactor)
                         };
                         player.setPosition(player.x - target.x, player.y - target.y);
-                        if (interacting && player.id === playerID) {
+                        if (interacting && player.id === playerID && data.tile.properties.transport) {
                             changeMap(game, player);
                         }
                     }
