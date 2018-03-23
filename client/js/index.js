@@ -3,6 +3,7 @@ const game_name = "pixel_park";
 
 import {MainMenu} from "../js/scenes/MainMenu.js"
 import {PixilTown} from "./scenes/PixilTown.js";
+import {Voxalia} from "./scenes/Voxalia.js";
 
 //data
 function saveResolution() {
@@ -23,7 +24,7 @@ const config = {
             debug: false
         }
     },
-    scene: [MainMenu, PixilTown],
+    scene: [MainMenu, PixilTown, Voxalia],
     pixelArt: true
 };
 

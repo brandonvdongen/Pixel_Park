@@ -142,7 +142,7 @@ export function update(game, config) {
                         };
                         player.setPosition(player.x - target.x, player.y - target.y);
                         if (interacting && player.id === playerID && data.tile.properties.transport) {
-                            changeMap(game, player);
+                            changeMap(game, player, data.tile.properties);
                         }
                     }
                 }
@@ -161,7 +161,9 @@ export function getTileData(game, player) {
     return data;
 }
 
-function changeMap(game, player) {
+function changeMap(game, player, data) {
     player.anims.play("delete", true);
-    console.log(game, player);
+    console.log(data.map);
+    game.scene.start(data.map);
+
 }
