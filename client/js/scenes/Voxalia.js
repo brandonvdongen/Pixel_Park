@@ -23,8 +23,8 @@ const config = {
             name: "PixilTown",
             layer: 'Ground',
             position: {
-                x: 4,
-                y: 4
+                x: 9,
+                y: 9
             },
             target: {
                 map: "PixilTown",

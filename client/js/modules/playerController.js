@@ -52,6 +52,18 @@ export function preload(game) {
                 console.log(characters);
             }
         });
+        game.anims.create({
+            key: 'warp',
+            frames: game.anims.generateFrameNumbers('player_spawn', {frames: [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]}),
+            frameRate: 12,
+            repeat: 0,
+            onComplete: function (player) {
+                delete characters[player.id];
+                player.jumpMap();
+                player.destroy();
+
+            }
+        });
     });
 }
 
@@ -162,8 +174,8 @@ export function getTileData(game, player) {
 }
 
 function changeMap(game, player, data) {
-    player.anims.play("delete", true);
-    console.log(data.map);
-    game.scene.start(data.map);
-
+    player.jumpMap = function () {
+        game.scene.start(data.map);
+    };
+    player.anims.play("warp", true);
 }
